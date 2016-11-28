@@ -1,12 +1,14 @@
-G=Ginza Line
-M=Marunouchi Line
-H=Hibiya Line
-T=Tozai Line
+Tokyo Metro
+
 C=Chiyoda Line
-Y=Yurakucho Line
-Z=Hanzomon Line
-N=Namboku Line
 F=Fukutoshin Line
+G=Ginza Line
+Z=Hanzomon Line
+H=Hibiya Line
+M=Marunouchi Line
+N=Namboku Line
+T=Tozai Line
+Y=Yurakucho Line
 
 Akabane-Iwabuchi:N19 105
 Akasaka:C06 51 86

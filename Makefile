@@ -1,4 +1,4 @@
-SRC= init_metro.c main.c utils.c
+SRC= display.c init_metro.c main.c utils.c
 OBJ = $(SRC:.c=.o)
 CC=gcc
 CFLAGS=-Wall -W -g

@@ -9,6 +9,8 @@ int main(){
 	if(i)
 		fprintf(stderr, "Could not register function clean_mem\n");
 
-	init_metro("tokyo.metro");
+	if(init_metro("tokyo.metro"))
+	  display_metro();
+	
 	return 0;
 }

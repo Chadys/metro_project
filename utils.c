@@ -60,3 +60,21 @@ size_t count_lines(FILE * file){
 	}
 	return s;
 }
+
+// Get the ordinal suffix of a number
+char * ordinal_suffix(unsigned int n){
+	unsigned int unit = n%10, ten = (n/10)%100;
+  
+	if (ten == 1)
+		return "th";
+	switch (unit){
+		case 1:
+			return "st";
+		case 2:
+			return "nd";
+		case 3:
+			return "rd";
+		default:
+			return "th";
+	}
+}

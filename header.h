@@ -37,7 +37,9 @@ typedef struct graphlist{
 } graphlist;
 
 
-/*typedef struct line{
+/* First version with static arrays
+
+typedef struct line{
 	char symbol;
 	char name [MAX_LINE_NAME];
 } line;
@@ -60,11 +62,13 @@ typedef struct line{
 } line;
 
 typedef struct station{
-	unsigned int (* line)[2]; //the line this station belongs to, line[i][0] is the lines index, line[i][1] is the station's number on that line
+	unsigned int (* lines)[2]; //the line this station belongs to, line[i][0] is the lines index, line[i][1] is the station's number on that line
+	unsigned int nlines;
 	char * name;
 } station;
 
 typedef struct subway{
+	char * name;
 	station * stations;
 	unsigned int nsta;
 	line * lines;
@@ -92,11 +96,16 @@ extern graphlist graph1;
 // The subway network file parser, which construct the graph or indicate errors
 char init_metro(char *);
 
+/* display.c */
+// All display functions
+void display_metro();
+
 /* utils.c */
 // Miscellanous functions
 void *getmem(size_t, size_t);
 void clean_mem();
 void ctrlC(int);
 size_t count_lines(FILE *);
+char * ordinal_suffix(unsigned int);
 
 #endif

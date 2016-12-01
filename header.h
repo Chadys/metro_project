@@ -93,7 +93,7 @@ typedef struct trajet {
 } trajet;
 
 typedef struct trajets{
-    trajet **trajet;
+    trajet *trajet;
     unsigned int ntrajets;
 } trajets;
 
@@ -126,9 +126,14 @@ extern memory *garbage_collector;
 // The subway network file parser, which construct the graph or indicate errors
 char init_metro(char *);
 
+/* dijkstra.c */
+// The Dijkstra algorithm to find all shortest path
+trajets dijkstra_list(unsigned int, unsigned int);
+
 /* display.c */
 // All display functions
 void display_metro();
+void display_paths(unsigned int, unsigned int, trajets);
 
 /* utils.c */
 // Miscellanous functions

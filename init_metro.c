@@ -82,10 +82,10 @@ char init_name(FILE * file){
         fprintf(stderr, "Invalid subway file, missing name\n");
         return 0;
     }
-    metro.name = getmem(size, sizeof(char));
+    metro.name = getmem(size+1, sizeof(char));
     if (!metro.name)
         return 0;
-    strncpy(metro.name, buffer, size);
+    strncpy(metro.name, buffer, size+1);
     if (!fgets(buffer, MAX_CHAR_READ, file)){
         perror("fgets");
         return 0;
@@ -113,10 +113,10 @@ char init_lines(FILE *file, size_t final_size /* number of lines */){
             return 0;
         }
         metro.lines[metro.nli].symbol=buffer[0];
-        metro.lines[metro.nli].name = getmem(size-2,sizeof(char));
+        metro.lines[metro.nli].name = getmem(size-1,sizeof(char));
         if(!metro.lines[metro.nli].name)
             return 0;
-        strncpy(metro.lines[metro.nli].name, buffer+2, size-2);
+        strncpy(metro.lines[metro.nli].name, buffer+2, size-1);
         metro.lines[metro.nli].name[size-3]='\0'; // remplace le '\n' final
         metro.nli++;
     }

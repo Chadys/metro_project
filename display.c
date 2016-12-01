@@ -39,3 +39,47 @@ void display_metro(){
     display_lines();
     display_stations();
 }
+
+
+void display_path(unsigned int begin, unsigned int end, trajet *path){
+    unsigned int to=end, it=end, prec, line = UINT_MAX;
+    int dir = 2;
+    
+    while(to != begin){
+        prec = path[it].from;
+        path[it].from = to;
+        to=it;
+        it = prec;
+    }
+    it = to;
+    printf("%s", metro.stations[it].name);
+    while(path[it].from != it){
+        if(metro.stations[path[it].from].lines[path[path[it].from].line][0] != line || path[path[it].from].direction != dir){
+            line = metro.stations[path[it].from].lines[path[path[it].from].line][0];
+            dir = path[path[it].from].direction;
+            if(!dir)
+                printf(" -> walk");
+            else
+                printf(" -> (%s direction %s)", metro.lines[line].name, dir>0 ? "MAX" : "1");
+        }
+        printf(" -> %s", metro.stations[path[it].from].name);
+        it=path[it].from;
+    }
+    printf("\n");
+}
+
+void display_paths(unsigned int begin, unsigned int end, trajets paths){
+    unsigned int i;
+    
+    if(!paths.ntrajets){
+        printf("There is no path from %s to %s or an error occured\n", metro.stations[begin].name, metro.stations[end].name);
+        return;
+    }
+    if(paths.ntrajets >1)
+        printf("The shortest paths from %s to %s are :\n", metro.stations[begin].name, metro.stations[end].name);
+    else
+        printf("The shortest path from %s to %s is :\n", metro.stations[begin].name, metro.stations[end].name);
+    for (i=0; i<paths.ntrajets; i++){
+        display_path(begin, end, paths.trajet+i*metro.nsta);
+    }
+}

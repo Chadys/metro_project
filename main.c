@@ -9,16 +9,25 @@ int main(){
         perror("signal");
     i=atexit(clean_mem);
     if(i)
-        fprintf(stderr, "Could not register function clean_mem\n");
+        print_error("Could not register function clean_mem");
 
     if(init_metro("tokyo.metro"))
       display_metro();
     
-    begin = 8;
-    end = 15;
-    paths = dijkstra_list(begin, end);
     
-    display_paths(begin, end, paths);
-    free(paths.trajet);
+//     begin = 99;
+//     end = 24;
+    
+    for(begin=0; begin<metro.nsta; begin++){
+        for(end=i+1; end<metro.nsta; end++){
+            paths = dijkstra_list(begin, end);
+            
+            display_paths(begin, end, paths);
+        
+            if(paths.ntrajets)
+                free(paths.trajet);
+        }
+    }
+    
     return 0;
 }

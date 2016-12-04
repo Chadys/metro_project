@@ -10,7 +10,12 @@ void change_paths(trajets, unsigned int, unsigned int, unsigned int, unsigned in
 // Get shortest path with the graph of successors' list
 trajets dijkstra_list(unsigned int begin, unsigned int end){
     trajets paths = {NULL, 0};
+    unsigned int i, j;
     
+    if(begin >= metro.nsta || end >= metro.nsta){
+        print_error("Station not belonging to this network");
+        return paths;
+    }
     paths.trajet = malloc(metro.nsta*sizeof(trajet));
     if(!paths.trajet){
         perror("malloc");
@@ -22,7 +27,17 @@ trajets dijkstra_list(unsigned int begin, unsigned int end){
     
     paths.trajet[begin].distance=0;
     paths.trajet[begin].direction=0;
-    return dijkstra_listbis(begin, end, paths, 0);
+    
+    for(i=0;paths.ntrajets && i<paths.ntrajets;i++){
+        j= find_new_shortest(paths.trajet+i*metro.nsta);
+        if(j== UINT_MAX){
+            print_error("Dijkstra somehow saw all stations without ever returning");
+            free(paths.trajet);
+            return (trajets){NULL,0};
+        }
+        paths = dijkstra_listbis(j, end, paths, i);
+    }
+    return dijkstra_list_sort(paths, end);
 }
 
 
@@ -78,10 +93,9 @@ trajets dijkstra_listbis(unsigned int current, unsigned int end, trajets paths, 
                             return (trajets){NULL,0};
                         }
                         paths.trajet = test;
+                        path = paths.trajet+current_path*metro.nsta;
                         for(j=paths.ntrajets-i; i; i--, j++){
                             memcpy(paths.trajet+j*metro.nsta, paths.trajet+current_path*metro.nsta, metro.nsta*sizeof(trajet));
-                            paths.trajet[j*metro.nsta+corr->car->num].distance = distance;
-                            paths.trajet[j*metro.nsta+corr->car->num].from = current;
                             paths.trajet[j*metro.nsta+corr->car->num].line = lines[i][0];
                             paths.trajet[j*metro.nsta+corr->car->num].direction = lines[i][1]-2;
                         }
@@ -98,18 +112,15 @@ trajets dijkstra_listbis(unsigned int current, unsigned int end, trajets paths, 
                     return (trajets){NULL,0};
                 }
                 paths.trajet=test;
+                path = paths.trajet+current_path*metro.nsta;
                 if(!lines[0][1]){ //line hasn't changed
                     memcpy(paths.trajet+(paths.ntrajets-1)*metro.nsta, paths.trajet+current_path*metro.nsta, metro.nsta*sizeof(trajet));
-                    paths.trajet[(paths.ntrajets-1)*metro.nsta+corr->car->num].distance = distance;
-                    paths.trajet[(paths.ntrajets-1)*metro.nsta+corr->car->num].from = current;
                     paths.trajet[(paths.ntrajets-1)*metro.nsta+corr->car->num].line = n;
                     paths.trajet[(paths.ntrajets-1)*metro.nsta+corr->car->num].direction = path[current].direction;
                 }
                 else{
                     for(j=paths.ntrajets-i-1, i=0; j<paths.ntrajets; j++, i++){
                         memcpy(paths.trajet+j*metro.nsta, paths.trajet+current_path*metro.nsta, metro.nsta*sizeof(trajet));
-                        paths.trajet[j*metro.nsta+corr->car->num].distance = distance;
-                        paths.trajet[j*metro.nsta+corr->car->num].from = current;
                         paths.trajet[j*metro.nsta+corr->car->num].line = lines[i][0];
                         paths.trajet[j*metro.nsta+corr->car->num].direction = lines[i][1]-2;
                     }
@@ -119,13 +130,13 @@ trajets dijkstra_listbis(unsigned int current, unsigned int end, trajets paths, 
         corr = corr->cdr;
     }
     
-    paths = dijkstra_listbis(find_new_shortest(paths.trajet+current_path*metro.nsta), end, paths, current_path);
-    for(i=extra_paths;paths.ntrajets && i<paths.ntrajets;i++){
-        paths = dijkstra_listbis(find_new_shortest(paths.trajet+i*metro.nsta), end, paths, i);
+    j= find_new_shortest(paths.trajet+current_path*metro.nsta);
+    if(j== UINT_MAX){
+        print_error("Dijkstra somehow saw all stations without ever returning");
+        free(paths.trajet);
+        return (trajets){NULL,0};
     }
-    if(!paths.ntrajets)
-        return paths;
-    return dijkstra_list_sort(paths, end);
+    return dijkstra_listbis(j, end, paths, current_path);
 }
 
 void get_common_lines(unsigned int a, unsigned int b, unsigned int lines[][2]){
@@ -167,7 +178,7 @@ void change_paths(trajets paths, unsigned int current_path, unsigned int extra_p
     
 
 unsigned int find_new_shortest(trajet *path){
-    unsigned int i, n, d;
+    unsigned int i, n = UINT_MAX, d;
     
     for(i=0; i<metro.nsta; i++)
         if(path[i].unused){
@@ -186,14 +197,73 @@ unsigned int find_new_shortest(trajet *path){
 
 
 trajets dijkstra_list_sort(trajets t1, unsigned int end){
+    unsigned int shortest_distance, i, j, size, final_size, station, station2, to_keep[t1.ntrajets];
+    trajets final;
+    
+    if(!t1.ntrajets)
+        return t1;
+    shortest_distance = t1.trajet[end].distance;
+    to_keep[0] = 0;
+    size=1;
+    
+    //keep only the shortest paths, and count their number
+    for (i=1; i<t1.ntrajets; i++){
+        if(t1.trajet[i*metro.nsta+end].distance == shortest_distance){
+            to_keep[size] = i;
+            size++;
+        }
+        else if(t1.trajet[i*metro.nsta+end].distance < shortest_distance){
+            shortest_distance = t1.trajet[i*metro.nsta+end].distance;
+            to_keep[0] = i;
+            size=1;
+        }
+    }
+    
+    //check that no path are the same
+     for (i=0, final_size = size; i<size; i++){
+         if(to_keep[i] == UINT_MAX)
+             continue;
+         for (j=i+1; j<size; j++){
+             if(to_keep[j] == UINT_MAX)
+                continue;
+             for(station = end, station2 = end; station!=UINT_MAX && station2 != UINT_MAX; station = t1.trajet[to_keep[i]*metro.nsta+station].from, station2 = t1.trajet[to_keep[j]*metro.nsta+station2].from)
+                 if(station != station2)
+                     break;;
+             if(station == UINT_MAX && station2 == UINT_MAX){
+                 to_keep[j]=UINT_MAX;
+                 final_size--;
+             }
+         }
+     }
+    
+    //allocate the final list of possible paths, keeping only the shortest unique ones
+    final.ntrajets = final_size;
+    final.trajet = malloc(final_size*sizeof(trajet[metro.nsta]));
+    if (!final.trajet){
+        free(t1.trajet);
+        return (trajets){NULL, 0};
+    }
+    for(i=0; i<size; i++)
+        if (to_keep[i] != UINT_MAX)
+            memcpy(final.trajet+i*metro.nsta, t1.trajet+to_keep[i]*metro.nsta, metro.nsta*sizeof(trajet));;
+    free(t1.trajet);
+    return final;
+}
+
+//first version
+/*trajets dijkstra_list_sort(trajets t1, unsigned int end){
     unsigned int shortest_distance, i, j, size;
     unsigned char to_keep[t1.ntrajets];
     trajets final;
     
+    if(!t1.ntrajets)
+        return t1;
     memset(to_keep, 0, t1.ntrajets*sizeof(char));
     shortest_distance = t1.trajet[end].distance;
     to_keep[0] = 1;
     size=1;
+    
+    //keep only the shortest paths, and count their number
     for (i=1; i<t1.ntrajets; i++){
         if(t1.trajet[i*metro.nsta+end].distance == shortest_distance){
             size++;
@@ -215,12 +285,13 @@ trajets dijkstra_list_sort(trajets t1, unsigned int end){
         return (trajets){NULL, 0};
     }
     for(i=0, j=0; i<size; i++){
-        for(; j<size; j++){
+        for(; j<t1.ntrajets; j++){
             if(to_keep[j]){
-                    memcpy(final.trajet+i, t1.trajet+j*metro.nsta, metro.nsta*sizeof(trajet));
+                    memcpy(final.trajet+i*metro.nsta, t1.trajet+j*metro.nsta, metro.nsta*sizeof(trajet));
+                    break;
             }
         }
     }
     free(t1.trajet);
     return final;
-}
+}*/

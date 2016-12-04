@@ -26,7 +26,7 @@ char init_metro(char * filename){
 
     line_size = count_lines(file);
     if(!line_size){
-        fprintf(stderr, "Invalid subway file, wrong lines format\n");
+        print_error("Invalid subway file, wrong lines format");
         fclose(file);
         return 0;
     }
@@ -37,7 +37,7 @@ char init_metro(char * filename){
     }
     station_size = count_lines(file);
     if(!station_size){
-        fprintf(stderr, "Invalid subway file, wrong stations format\n");
+        print_error("Invalid subway file, wrong stations format");
         fclose(file);
         return 0;
     }
@@ -48,7 +48,7 @@ char init_metro(char * filename){
     }
     while((c = fgetc(file)) != EOF){
         if (c != '\n'){
-            fprintf(stderr, "Invalid subway file format, extra text\n");
+            print_error("Invalid subway file format, extra text");
             fclose(file);
             return 0;   
         }
@@ -75,11 +75,11 @@ char init_name(FILE * file){
     buffer[MAX_CHAR_READ-1] = '\0'; //to avoid undefined behaviour of strlen
     size=strlen(buffer);
     if(buffer[size-1] != '\n'){
-        fprintf(stderr, "Invalid subway file, name is too long\n");
+        print_error("Invalid subway file, name is too long");
         return 0;
     }
     if(!size){
-        fprintf(stderr, "Invalid subway file, missing name\n");
+        print_error("Invalid subway file, missing name");
         return 0;
     }
     metro.name = getmem(size+1, sizeof(char));
@@ -91,7 +91,7 @@ char init_name(FILE * file){
         return 0;
     }
     if(buffer[0]!='\n'){
-        fprintf(stderr, "Invalid subway file, missing carriage return between name and lines\n");
+        print_error("Invalid subway file, missing carriage return between name and lines");
         return 0;
     }
     return 1;
@@ -105,11 +105,11 @@ char init_lines(FILE *file, size_t final_size /* number of lines */){
     while(fgets(buffer, MAX_CHAR_READ, file) && buffer[0] != '\n' && metro.nli < final_size){
         buffer[MAX_CHAR_READ-1] = '\0'; //to avoid undefined behaviour of strlen
         if((size=strlen(buffer)) < 3 || buffer[1]!='='){
-            fprintf(stderr, "Invalid subway file, wrong line format, on line %u\n", metro.nli+3);
+            fprintf(stderr, "%s%sError : %s%sInvalid subway file, wrong line format, on line %u%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED), metro.nli+3, codeFromStyle(RESET));
             return 0;
         }
         if(buffer[size-1] != '\n'){
-            fprintf(stderr, "Invalid subway file, line's name is too long, on line %u\n", metro.nli+3);
+            fprintf(stderr, "%s%sError : %s%sInvalid subway file, line's name is too long, on line %u%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED), metro.nli+3, codeFromStyle(RESET));
             return 0;
         }
         metro.lines[metro.nli].symbol=buffer[0];
@@ -137,13 +137,13 @@ char init_stations(FILE *file, size_t final_size /* number of stations */){
     while(metro.nsta < final_size){
         for(c=fgetc(file), i=0;c != ':';i++, c=fgetc(file)){
             if(i>=MAX_CHAR_READ){
-                fprintf(stderr, "Invalid subway file, station's name is too long, on line %u\n", metro.nli+4+metro.nsta);
+                fprintf(stderr, "%s%sError : %s%sInvalid subway file, station's name is too long, on line %u%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.nli+4+metro.nsta, codeFromStyle(RESET));
                 return 0;
             }
             buffer[i]=c;
         }
         if (i==0){
-            fprintf(stderr, "Invalid subway file, station's name missing, on line %u\n", metro.nli+4+metro.nsta);
+            fprintf(stderr, "%s%sError : %s%sInvalid subway file, station's name missing, on line %u%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.nli+4+metro.nsta, codeFromStyle(RESET));
             return 0;
         }
         buffer[i]='\0';
@@ -160,7 +160,7 @@ char init_stations(FILE *file, size_t final_size /* number of stations */){
         metro.nsta++;
     }
     if(metro.nsta != graph1.nb){
-        fprintf(stderr, "Incoherence in graph's nodes and stations number\n");
+        print_error("Incoherence in graph's nodes and stations number");
         return 0;
     }
     return 1;
@@ -175,7 +175,7 @@ char init_station_line(FILE* file){
     // Récupère la chaîne qui représente toutes les lignes auxquelles appartient une station (ex :"C08/H06/M15")
     while((c=fgetc(file)) != ' '){
         if(i>max_buff-2){ //pour laisser la place pour le '\0'
-            fprintf(stderr, "Invalid subway file, invalid station's line format, station %s\n", metro.stations[metro.nsta].name);
+            fprintf(stderr, "%s%sError : %s%sInvalid subway file, invalid station's line format, station %s%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, codeFromStyle(RESET));
             return 0;
         }
         buffer[i]=c;
@@ -188,7 +188,7 @@ char init_station_line(FILE* file){
     line[0] = strtok(buffer, "/");
     for(i = 1; line[i-1] != NULL; i++){
         if(i>=metro.nli){
-            fprintf(stderr, "Invalid subway file, too many lines for one station, station %s\n", metro.stations[metro.nsta].name);
+            fprintf(stderr, "%s%sError : %s%sInvalid subway file, too many lines for one station, station %s%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, codeFromStyle(RESET));
             return 0;
         }
         line[i] = strtok(NULL, "/");
@@ -201,16 +201,16 @@ char init_station_line(FILE* file){
         return 0;
     for(i=0;line[i]; i++){
         if(!isalpha(line[i][0])){
-            fprintf(stderr, "Invalid subway file, wrong station's line format, first character is not a letter, station %s, line %s\n", metro.stations[metro.nsta].name, line[i]);
+            fprintf(stderr, "%s%sError : %s%sInvalid subway file, wrong station's line format, first character is not a letter, station %s, line %s%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, line[i], codeFromStyle(RESET));
             return 0;
         }
         for (j=1; line[i][j]!='\0'; j++)
             if(!isdigit(line[i][j])){
-                fprintf(stderr, "Invalid subway file, wrong station's line format, station's number contain non digit character, station %s, line %s\n", metro.stations[metro.nsta].name, line[i]);
+                fprintf(stderr, "%s%sError : %s%sInvalid subway file, wrong station's line format, station's number contain non digit character, station %s, line %s%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, line[i], codeFromStyle(RESET));
                 return 0;
             };
         if(j==1){
-            fprintf(stderr, "Invalid subway file, wrong station's line format, missing station's number, station %s, line %s\n", metro.stations[metro.nsta].name, line[i]);
+            fprintf(stderr, "%s%sError : %s%sInvalid subway file, wrong station's line format, missing station's number, station %s, line %s%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, line[i], codeFromStyle(RESET));
             return 0;
         }
         line[i][0] = toupper(line[i][0]); //for forked lines (like the Marunouchi Line, having a 'M' and 'm' branch
@@ -218,7 +218,7 @@ char init_station_line(FILE* file){
             if(metro.lines[j].symbol == line[i][0])
                 break;;
         if(j == metro.nli){
-            fprintf(stderr, "Invalid subway file, wrong station's line format, line doesn't exists, station %s, line %s\n", metro.stations[metro.nsta].name, line[i]);
+            fprintf(stderr, "%s%sError : %s%sInvalid subway file, wrong station's line format, line doesn't exists, station %s, line %s%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, line[i], codeFromStyle(RESET));
             return 0;
         }
         metro.stations[metro.nsta].lines[i][0]=j;
@@ -245,11 +245,11 @@ char init_station_graph(FILE *file, size_t final_size /* number of stations */){
         j++;
         for(i=0 ; !strchr(" \n",c) ; i++, c=fgetc(file)){
             if(!isdigit(c)){
-                fprintf(stderr, "Invalid subway file, correspondence %d of station %s is not a number\n", j, metro.stations[metro.nsta].name);
+                fprintf(stderr, "%s%sError : %s%sInvalid subway file, correspondence %d of station %s is not a number%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  j, metro.stations[metro.nsta].name, codeFromStyle(RESET));
                 return 0;
             }
             if(i>=digits){
-                fprintf(stderr, "Invalid subway file, the number of the %d%s correspondence of station %s is higher than the number of existing stations\n", j, ordinal_suffix(j), metro.stations[metro.nsta].name);
+                fprintf(stderr, "%s%sError : %s%sInvalid subway file, the number of the %d%s correspondence of station %s is higher than the number of existing stations%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  j, ordinal_suffix(j), metro.stations[metro.nsta].name, codeFromStyle(RESET));
                 return 0;
             }
             buffer[i]=c;
@@ -261,7 +261,7 @@ char init_station_graph(FILE *file, size_t final_size /* number of stations */){
                 return 0;
             n = ((unsigned int) strtoul(buffer,NULL,10));
             if(n >= final_size){
-                fprintf(stderr, "Invalid subway file, the number of the %d%s correspondence of station %s is higher than the number of existing stations\n", j, ordinal_suffix(j), metro.stations[metro.nsta].name);
+                fprintf(stderr, "%s%sError : %s%sInvalid subway file, the number of the %d%s correspondence of station %s is higher than the number of existing stations%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  j, ordinal_suffix(j), metro.stations[metro.nsta].name, codeFromStyle(RESET));
                 return 0;
             }
             corr->car = graph1.noeuds + n;

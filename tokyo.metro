@@ -34,7 +34,7 @@ Hibiya:C09/H07 41 78 139 14
 Higashi-ginza:H09 128 14
 Higashi-ikebukuro:Y10 32 16
 Higashi-koenji:M04 108 107
-Higashi-shinjuku:F12 111 84
+Higashi-shinjuku:F12 113 84
 Hikawadai:F05/Y05 19 54
 Hiro-o:H03 11 95
 Hon-komagome:N13 123 52
@@ -56,7 +56,7 @@ Kayabacho:H12/T11 77 18 79 66
 Kiba:T13 126 66
 Kinshicho:Z13 93 117
 Kita-ayase:C20 7
-Kita-sando:F14 111 59
+Kita-sando:F14 113 59
 Kita-senju:C18/H21 7 57 62
 Kiyosumi-shirakawa:Z11 117 116
 Kodemmacho:H14 79 3
@@ -121,9 +121,9 @@ Shin-koenji:M03 23 60
 Shin-nakano:M05 74 23
 Shin-ochanomizu:C12 140 6 94
 Shin-otsuka:M24 32 68
-Shinjuku:F13/M08 24 83 46 113
+Shinjuku:M08 83 113
 Shinjuku-gyoemmae:M10 136 113
-Shinjuku-sanchome:M09 111 112
+Shinjuku-sanchome:M09/F13 24 46 111 112
 Shintomicho:Y20 129 15
 Suehirocho:G14 131 39
 Suitengumae:Z10 65 48

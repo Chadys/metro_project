@@ -78,3 +78,7 @@ char * ordinal_suffix(unsigned int n){
             return "th";
     }
 }
+
+inline void print_error(const char* error){
+    fprintf(stderr, "%s%sError : %s%s%s%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED), error, codeFromStyle(RESET));
+}

@@ -19,13 +19,15 @@ int main(){
 //     end = 24;
     
     for(begin=0; begin<metro.nsta; begin++){
-        for(end=i+1; end<metro.nsta; end++){
+        for(end=begin+1; end<metro.nsta; end++){
             paths = dijkstra_list(begin, end);
             
             display_paths(begin, end, paths);
         
-            if(paths.ntrajets)
+            if(paths.ntrajets){
+                paths.ntrajets = 0;
                 free(paths.trajet);
+            }
         }
     }
     

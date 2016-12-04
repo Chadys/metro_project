@@ -38,7 +38,7 @@ void display_metro(){
     printf("\n%s%s%s%s\n", codeFromStyle(BOLD), codeFromStyle(BRIGHTGREEN), metro.name, codeFromStyle(RESET));
     display_lines();
     display_stations();
-    printf("%s\n\n", codeFromStyle(RESET));
+    printf("%s\n\n\n", codeFromStyle(RESET));
 }
 
 
@@ -65,27 +65,27 @@ void display_path(unsigned int begin, unsigned int end, trajet *path, unsigned i
             line = path[path[it].from].line != UINT_MAX ? metro.stations[path[it].from].lines[path[path[it].from].line][0] : UINT_MAX;
             dir = path[path[it].from].direction;
             if(!dir)
-                printf(" -> %swalk", codeFromStyle(BLACK+metro.nli+1));
+                printf(" -> %swalk", codeFromStyle(BLACK+metro.nli%15+1));
             else
-                printf(" -> %s(%s direction %s)", codeFromStyle(BLACK+line+1), metro.lines[line].name, dir>0 ? "MAX" : "1");
+                printf(" -> %s(%s direction %s)", codeFromStyle(BLACK+line%15+1), metro.lines[line].name, dir>0 ? "MAX" : "1");
         }
         printf(" -> %s", metro.stations[path[it].from].name);
         it=path[it].from;
     }
-    printf("%s\n", codeFromStyle(RESET));
+    printf("%s\n\n", codeFromStyle(RESET));
 }
 
 void display_paths(unsigned int begin, unsigned int end, trajets paths){
     unsigned int i;
     
     if(!paths.ntrajets){
-        printf("\nThere is no path from %s to %s or an error occured\n", metro.stations[begin].name, metro.stations[end].name);
+        printf("There is no path from %s to %s or an error occured\n", metro.stations[begin].name, metro.stations[end].name);
         return;
     }
     if(paths.ntrajets >1)
-        printf("\nThe shortest paths from %s to %s are :\n", metro.stations[begin].name, metro.stations[end].name);
+        printf("The shortest paths from %s to %s are :\n", metro.stations[begin].name, metro.stations[end].name);
     else
-        printf("\nThe shortest path from %s to %s is :\n", metro.stations[begin].name, metro.stations[end].name);
+        printf("The shortest path from %s to %s is :\n", metro.stations[begin].name, metro.stations[end].name);
     for (i=0; i<paths.ntrajets; i++){
         display_path(begin, end, paths.trajet+i*metro.nsta, i+1);
     }

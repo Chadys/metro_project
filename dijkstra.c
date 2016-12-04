@@ -16,6 +16,10 @@ trajets dijkstra_list(unsigned int begin, unsigned int end){
         print_error("Station not belonging to this network");
         return paths;
     }
+    if(begin == end){
+        print_error("You already are where you want to go");
+        return paths;
+    }
     paths.trajet = malloc(metro.nsta*sizeof(trajet));
     if(!paths.trajet){
         perror("malloc");
@@ -28,10 +32,12 @@ trajets dijkstra_list(unsigned int begin, unsigned int end){
     paths.trajet[begin].distance=0;
     paths.trajet[begin].direction=0;
     
-    for(i=0;paths.ntrajets && i<paths.ntrajets;i++){
+    
+    paths = dijkstra_listbis(begin, end, paths, 0);
+    for(i=1;paths.ntrajets && i<paths.ntrajets;i++){
         j= find_new_shortest(paths.trajet+i*metro.nsta);
         if(j== UINT_MAX){
-            print_error("Dijkstra somehow saw all stations without ever returning");
+            print_error("Dijkstra somehow saw all stations without ever returning, what did you do ?");
             free(paths.trajet);
             return (trajets){NULL,0};
         }
@@ -243,9 +249,11 @@ trajets dijkstra_list_sort(trajets t1, unsigned int end){
         free(t1.trajet);
         return (trajets){NULL, 0};
     }
-    for(i=0; i<size; i++)
-        if (to_keep[i] != UINT_MAX)
-            memcpy(final.trajet+i*metro.nsta, t1.trajet+to_keep[i]*metro.nsta, metro.nsta*sizeof(trajet));;
+    for(i=0, j=0; i<size && j<final_size; i++)
+        if (to_keep[i] != UINT_MAX){
+            memcpy(final.trajet+j*metro.nsta, t1.trajet+to_keep[i]*metro.nsta, metro.nsta*sizeof(trajet));
+            j++;
+        };
     free(t1.trajet);
     return final;
 }

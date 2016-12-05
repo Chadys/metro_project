@@ -4,6 +4,7 @@ int main(){
     int i;
     trajets paths;
     unsigned int begin, end;
+    RUN_MODE mode;
 
     if (signal(SIGINT,ctrlC) == SIG_ERR)
         perror("signal");
@@ -11,8 +12,9 @@ int main(){
     if(i)
         print_error("Could not register function clean_mem");
 
-    if(init_metro("tokyo.metro"))
-      display_metro();
+    mode = MATRIX;
+    if(init_metro("tokyo.metro", mode))
+      display_metro(mode);
     
     
 //     begin = 99;
@@ -20,7 +22,7 @@ int main(){
     
     for(begin=0; begin<metro.nsta; begin++){
         for(end=begin+1; end<metro.nsta; end++){
-            paths = dijkstra_list(begin, end);
+            paths = dijkstra(begin, end, mode);
             
             display_paths(begin, end, paths);
         
@@ -31,5 +33,7 @@ int main(){
         }
     }
     
+    if(i)
+        clean_mem();    
     return 0;
 }

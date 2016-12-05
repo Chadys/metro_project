@@ -13,6 +13,7 @@ Résoudre dans ce cas le problème du plus court chemin, algorithme de Dijkstra.
 
 #include <ctype.h>
 #include <limits.h>
+#include <math.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,6 +41,14 @@ typedef struct graphlist{
     noeud * noeuds;
     unsigned int nb;
 } graphlist;
+
+
+/*** graph by matrix ***/
+
+typedef struct graphmatrix{
+    char *mat;
+    unsigned int nb;
+} graphmatrix;
 
 
 /*** All subway's info ***/
@@ -82,6 +91,7 @@ typedef struct subway{
     unsigned int nli;
 } subway;
 
+
 /*** Dijkstra specific ***/
 
 typedef struct trajet {
@@ -97,6 +107,7 @@ typedef struct trajets{
     unsigned int ntrajets;
 } trajets;
 
+
 /*** Other ***/
 
 typedef struct memory{
@@ -106,49 +117,16 @@ typedef struct memory{
 
 
 /**************************************************************************************************/
-/***** GLOBALS *****/
-
-/* init_metro.c */
-// Contain all the subway info (name of stations and lines, ...)
-extern subway metro;
-// Contain the graph by list of successors
-extern graphlist graph1;
-
-/* utils.c */
-// Linked list of all allocated memory in this program, to free all easily
-extern memory *garbage_collector;
-
-
-/**************************************************************************************************/
-/***** PROTOTYPES *****/
-
-/* init_metro.c */
-// The subway network file parser, which construct the graph or indicate errors
-char init_metro(char *);
-
-/* dijkstra.c */
-// The Dijkstra algorithm to find all shortest path
-trajets dijkstra_list(unsigned int, unsigned int);
-
-/* display.c */
-// All display functions
-void display_metro();
-void display_paths(unsigned int, unsigned int, trajets);
-
-/* utils.c */
-// Miscellanous functions
-void *getmem(size_t, size_t);
-void clean_mem();
-void ctrlC(int);
-size_t count_lines(FILE *);
-char * ordinal_suffix(unsigned int);
-void print_error(const char *);
-
-
-/**************************************************************************************************/
 /***** ENUM *****/
 
-typedef enum TERMINAL_STYLES{
+typedef enum RUN_MODE{
+        SUCC_LIST,
+        MATRIX,
+        COMPARE
+} RUN_MODE;
+
+// All options to customize a terminal
+enum TERMINAL_STYLES{
     RESET,
     BOLD,
     DARK,
@@ -194,9 +172,9 @@ typedef enum TERMINAL_STYLES{
     BG_MAGENTA,
     BG_CYAN,
     BG_WHITE
-} TERMINAL_STYLES;
+};
 
-static inline char *codeFromStyle(TERMINAL_STYLES s)
+static inline char *codeFromStyle(enum TERMINAL_STYLES s)
 {
     static char *strings[] = {"\e[0m", "\e[1m", "\e[2m", "\e[3m", "\e[4m", "\e[6m", "\e[7m", "\e[8m", "\e[9m",
         "\e[30m", "\e[31m", "\e[32m", "\e[33m", "\e[34m", "\e[35m", "\e[36m", "\e[37m",
@@ -206,5 +184,47 @@ static inline char *codeFromStyle(TERMINAL_STYLES s)
 
     return strings[s];
 }
+
+
+/**************************************************************************************************/
+/***** GLOBALS *****/
+
+/* init_metro.c */
+// Contain all the subway info (name of stations and lines, ...)
+extern subway metro;
+// Contain the graph by list of successors
+extern graphlist graph_list;
+// Contain the graph by matrix
+extern graphmatrix matrix;
+
+/* utils.c */
+// Linked list of all allocated memory in this program, to free all easily
+extern memory *garbage_collector;
+
+
+/**************************************************************************************************/
+/***** PROTOTYPES *****/
+
+/* init_metro.c */
+// The subway network file parser, which construct the graph or indicate errors
+char init_metro(char* filename, RUN_MODE);
+
+/* dijkstra.c */
+// The Dijkstra algorithm to find all shortest path
+trajets dijkstra(unsigned int, unsigned int, RUN_MODE);
+
+/* display.c */
+// All display functions
+void display_metro(RUN_MODE);
+void display_paths(unsigned int, unsigned int, trajets);
+
+/* utils.c */
+// Miscellanous functions
+void *getmem(size_t, size_t);
+void clean_mem();
+void ctrlC(int);
+size_t count_lines(FILE *);
+char * ordinal_suffix(unsigned int);
+void print_error(const char *);
 
 #endif

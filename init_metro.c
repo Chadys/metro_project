@@ -2,17 +2,18 @@
 
 
 subway metro = {NULL, NULL, 0, NULL, 0};
-graphlist graph1 = {NULL, 0};
+graphlist graph_list = {NULL, 0};
+graphmatrix matrix = {NULL, 0};
 
 char init_name(FILE *);
 char init_lines(FILE *, size_t);
-char init_stations(FILE *, size_t);
+char init_stations(FILE *, size_t, RUN_MODE);
 char init_station_line(FILE*);
-char init_station_graph(FILE *, size_t);
+char init_station_graph(FILE *, size_t, RUN_MODE);
 
 
 // Initialise the whole metro, station, lines and graph included
-char init_metro(char * filename){
+char init_metro(char * filename, RUN_MODE mode){
     FILE * file;
     size_t line_size, station_size;
     int c;
@@ -55,7 +56,7 @@ char init_metro(char * filename){
     }
     rewind(file);
 
-    if(!init_name(file) || !init_lines(file, line_size) || !init_stations(file, station_size)){
+    if(!init_name(file) || !init_lines(file, line_size) || !init_stations(file, station_size, mode)){
         fclose(file);
         return 0;
     }
@@ -128,12 +129,25 @@ char init_lines(FILE *file, size_t final_size /* number of lines */){
 }
 
 // Initialise all stations and the graph
-char init_stations(FILE *file, size_t final_size /* number of stations */){
+char init_stations(FILE *file, size_t final_size /* number of stations */, RUN_MODE mode){
     char buffer [MAX_CHAR_READ];
     int c, i;
-    graph1.noeuds = getmem(final_size, sizeof(noeud));
-    if (!graph1.noeuds)
-        return 0;
+    
+    switch(mode){
+        case COMPARE:
+            /* NO BREAK */
+        case SUCC_LIST:
+            graph_list.noeuds = getmem(final_size, sizeof(noeud));
+            if (!graph_list.noeuds)
+                return 0;
+            if(mode != COMPARE)
+                break;
+        default:
+            matrix.mat = getmem(final_size*final_size, sizeof(char));
+            if (!matrix.mat)
+                return 0;
+            memset(matrix.mat, 0, final_size*sizeof(char));
+    }
     while(metro.nsta < final_size){
         for(c=fgetc(file), i=0;c != ':';i++, c=fgetc(file)){
             if(i>=MAX_CHAR_READ){
@@ -155,11 +169,11 @@ char init_stations(FILE *file, size_t final_size /* number of stations */){
         if(!init_station_line(file))
             return 0;
         //ajoute elt au graph
-        if(!init_station_graph(file, final_size))
+        if(!init_station_graph(file, final_size, mode))
             return 0;
         metro.nsta++;
     }
-    if(metro.nsta != graph1.nb){
+    if((metro.nsta != graph_list.nb && (mode == SUCC_LIST || mode == COMPARE)) || (metro.nsta != matrix.nb && (mode == MATRIX || mode == COMPARE))){
         print_error("Incoherence in graph's nodes and stations number");
         return 0;
     }
@@ -229,7 +243,7 @@ char init_station_line(FILE* file){
 
 
 // Add a station to the graph with a list of successors
-char init_station_graph(FILE *file, size_t final_size /* number of stations */){
+char init_station_graph(FILE *file, size_t final_size /* number of stations */, RUN_MODE mode){
     unsigned int i = final_size, digits = 0, j=0, n;
     char c;
     succ * corr = NULL, *temp=NULL;
@@ -239,7 +253,8 @@ char init_station_graph(FILE *file, size_t final_size /* number of stations */){
     }
     char buffer[digits+1]; // create a buffer which can contain the same number of char as the number of digit of final_size
 
-    graph1.noeuds[metro.nsta].num=metro.nsta;
+    if(mode == SUCC_LIST || mode == COMPARE)
+        graph_list.noeuds[metro.nsta].num=metro.nsta;
     c=fgetc(file);
     while (c!='\n'){
         j++;
@@ -256,23 +271,39 @@ char init_station_graph(FILE *file, size_t final_size /* number of stations */){
         }
         buffer[i]='\0';
         if(strlen(buffer)!=0){
-            corr = getmem(1,sizeof(succ));
-            if(!corr)
-                return 0;
             n = ((unsigned int) strtoul(buffer,NULL,10));
             if(n >= final_size){
                 fprintf(stderr, "%s%sError : %s%sInvalid subway file, the number of the %d%s correspondence of station %s is higher than the number of existing stations%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  j, ordinal_suffix(j), metro.stations[metro.nsta].name, codeFromStyle(RESET));
                 return 0;
             }
-            corr->car = graph1.noeuds + n;
-            corr->cdr = temp;
-            temp = corr;
+            switch(mode){
+                case COMPARE:
+                    /* NO BREAK */
+                case SUCC_LIST:
+                    corr = getmem(1,sizeof(succ));
+                    if(!corr)
+                        return 0;
+                    corr->car = graph_list.noeuds + n;
+                    corr->cdr = temp;
+                    temp = corr;
+                    
+                    if(mode != COMPARE)
+                        break;
+                default:
+                    matrix.mat[metro.nsta*final_size+n]=1;
+            }
         }
         if(c == ' ')
             c=fgetc(file);
     }
-    graph1.noeuds[metro.nsta].next=corr;
-    graph1.nb++;
+    if(mode == SUCC_LIST || mode == COMPARE){
+        graph_list.noeuds[metro.nsta].next=corr;
+        graph_list.nb++;
+    }
+    if(mode == MATRIX || mode == COMPARE){
+        matrix.nb++;
+    }
+        
     return 1;
 }
 

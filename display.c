@@ -10,13 +10,13 @@ void display_lines(){
         printf("%s%c = %s%s\n", codeFromStyle(GRAY), metro.lines[i].symbol, codeFromStyle(WHITE), metro.lines[i].name);
 }
 
-void display_stations(){
+void display_stations(RUN_MODE mode){
     unsigned int i, j;
     succ *corr;
 
     printf("\n\n%sSTATIONS :\n\n", codeFromStyle(GREEN));
 
-    for(i=0;i<graph1.nb;i++){
+    for(i=0;i<metro.nsta;i++){
         printf("%s%s %s(", codeFromStyle(BLUE), metro.stations[i].name, codeFromStyle(DARKBLUE));
         for(j=0; j < metro.stations[i].nlines; j++){
             if(!j)
@@ -25,19 +25,28 @@ void display_stations(){
                 printf("/%c%u", metro.lines[metro.stations[i].lines[j][0]].symbol, metro.stations[i].lines[j][1]);
         }
         printf(")%s Correspondence(s) :%s", codeFromStyle(PURPLE), codeFromStyle(MAGENTA));
-        corr=graph1.noeuds[i].next;
-        while(corr){
-            printf(" %s", metro.stations[corr->car->num].name);
-            corr=corr->cdr;
+        
+        switch(mode){
+            case MATRIX:
+                for(j=0; j<matrix.nb; j++)
+                    if(matrix.mat[i*matrix.nb+j])
+                        printf(" %s", metro.stations[j].name);;
+                break;
+            default:
+                corr=graph_list.noeuds[i].next;
+                while(corr){
+                    printf(" %s", metro.stations[corr->car->num].name);
+                    corr=corr->cdr;
+                }
         }
         printf("\n");
     }
 }
 
-void display_metro(){
+void display_metro(RUN_MODE mode){
     printf("\n%s%s%s%s\n", codeFromStyle(BOLD), codeFromStyle(BRIGHTGREEN), metro.name, codeFromStyle(RESET));
     display_lines();
-    display_stations();
+    display_stations(mode);
     printf("%s\n\n\n", codeFromStyle(RESET));
 }
 

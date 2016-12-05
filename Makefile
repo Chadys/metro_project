@@ -1,4 +1,4 @@
-SRC= display.c init_metro.c dijkstra.c main.c utils.c
+SRC= display.c init_metro.c dijkstra.c main.c user_input.c utils.c
 OBJ = $(SRC:.c=.o)
 CC=gcc
 CFLAGS=-Wall -W -g

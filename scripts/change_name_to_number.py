@@ -4,7 +4,7 @@ import re
 # script permettant de changer la  structure du fichier du métro ("N01 = Meguro" devient "Meguro:N01")
 # ainsi que de renommer les correspondances par leur index dans la liste des stations
 
-with open("../tokyo.metro", 'r+') as source:
+with open("../tokyo.metro2", 'r+') as source:
     data=source.read()
     lines=[ligne.split()[0] for ligne in data.split('\n')[10:] if ligne]
     # Une autre façon d'écrire la ligne du dessus est la suivante, mais elle est moins concise

@@ -18,6 +18,7 @@ Résoudre dans ce cas le problème du plus court chemin, algorithme de Dijkstra.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define MAX_CHAR_READ 500 //max char of a text file read at once
 
@@ -125,6 +126,11 @@ typedef enum RUN_MODE{
         COMPARE
 } RUN_MODE;
 
+typedef enum SEARCH_MODE{
+        QUICKEST,
+        LEAST_TRANSFERS
+} SEARCH_MODE;
+
 // All options to customize a terminal
 enum TERMINAL_STYLES{
     RESET,
@@ -211,20 +217,27 @@ char init_metro(char* filename, RUN_MODE);
 
 /* dijkstra.c */
 // The Dijkstra algorithm to find all shortest path
-trajets dijkstra(unsigned int, unsigned int, RUN_MODE);
+trajets dijkstra(unsigned int, unsigned int, RUN_MODE, SEARCH_MODE);
 
 /* display.c */
 // All display functions
 void display_metro(RUN_MODE);
-void display_paths(unsigned int, unsigned int, trajets);
+void display_paths(unsigned int, unsigned int, trajets, SEARCH_MODE);
+
+/* user_input.c */
+// Management of interactions with the user
+RUN_MODE get_r_mode();
+SEARCH_MODE get_s_mode();
+unsigned int get_station();
 
 /* utils.c */
 // Miscellanous functions
 void *getmem(size_t, size_t);
-void clean_mem();
+void quit();
 void ctrlC(int);
 size_t count_lines(FILE *);
 char * ordinal_suffix(unsigned int);
+unsigned int count_digits_number(unsigned int);
 void print_error(const char *);
 
 #endif

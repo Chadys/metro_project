@@ -244,14 +244,10 @@ char init_station_line(FILE* file){
 
 // Add a station to the graph with a list of successors
 char init_station_graph(FILE *file, size_t final_size /* number of stations */, RUN_MODE mode){
-    unsigned int i = final_size, digits = 0, j=0, n;
+    unsigned int i = final_size, digits = count_digits_number(final_size), j=0, n;
     char c;
     succ * corr = NULL, *temp=NULL;
-    while(i) {
-        i /= 10;
-        digits++;
-    }
-    char buffer[digits+1]; // create a buffer which can contain the same number of char as the number of digit of final_size
+    char buffer[digits+1]; // create a buffer which can contain the same number of char as the number of digit of final_size + '\0'
 
     if(mode == SUCC_LIST || mode == COMPARE)
         graph_list.noeuds[metro.nsta].num=metro.nsta;
@@ -260,20 +256,20 @@ char init_station_graph(FILE *file, size_t final_size /* number of stations */, 
         j++;
         for(i=0 ; !strchr(" \n",c) ; i++, c=fgetc(file)){
             if(!isdigit(c)){
-                fprintf(stderr, "%s%sError : %s%sInvalid subway file, correspondence %d of station %s is not a number%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  j, metro.stations[metro.nsta].name, codeFromStyle(RESET));
+                fprintf(stderr, "%s%sError : %s%sInvalid subway file, transfer %d of station %s is not a number%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  j, metro.stations[metro.nsta].name, codeFromStyle(RESET));
                 return 0;
             }
             if(i>=digits){
-                fprintf(stderr, "%s%sError : %s%sInvalid subway file, the number of the %d%s correspondence of station %s is higher than the number of existing stations%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  j, ordinal_suffix(j), metro.stations[metro.nsta].name, codeFromStyle(RESET));
+                fprintf(stderr, "%s%sError : %s%sInvalid subway file, the number of the %d%s transfer of station %s is higher than the number of existing stations%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  j, ordinal_suffix(j), metro.stations[metro.nsta].name, codeFromStyle(RESET));
                 return 0;
             }
             buffer[i]=c;
         }
         buffer[i]='\0';
         if(strlen(buffer)!=0){
-            n = ((unsigned int) strtoul(buffer,NULL,10));
+            n = (unsigned int) strtoul(buffer,NULL,10);
             if(n >= final_size){
-                fprintf(stderr, "%s%sError : %s%sInvalid subway file, the number of the %d%s correspondence of station %s is higher than the number of existing stations%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  j, ordinal_suffix(j), metro.stations[metro.nsta].name, codeFromStyle(RESET));
+                fprintf(stderr, "%s%sError : %s%sInvalid subway file, the number of the %d%s transfer of station %s is higher than the number of existing stations%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  j, ordinal_suffix(j), metro.stations[metro.nsta].name, codeFromStyle(RESET));
                 return 0;
             }
             switch(mode){

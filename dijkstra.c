@@ -1,14 +1,14 @@
 #include "header.h"
 
 
-trajets dijkstrabis(unsigned int, unsigned int, trajets, unsigned int, RUN_MODE);
+trajets dijkstrabis(unsigned int, unsigned int, trajets, unsigned int, RUN_MODE, SEARCH_MODE);
 void get_common_lines(unsigned int, unsigned int, unsigned int lines[][2]);
 trajets dijkstra_sort(trajets, unsigned int);
 unsigned int find_new_shortest(trajet*);
 void change_paths(trajets, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, char);
 
 // Get shortest path with the graph of successors' list
-trajets dijkstra(unsigned int begin, unsigned int end, RUN_MODE mode){
+trajets dijkstra(unsigned int begin, unsigned int end, RUN_MODE r_mode, SEARCH_MODE s_mode){
     trajets paths = {NULL, 0};
     unsigned int i, j;
     
@@ -33,7 +33,7 @@ trajets dijkstra(unsigned int begin, unsigned int end, RUN_MODE mode){
     paths.trajet[begin].direction=0;
     
     
-    paths = dijkstrabis(begin, end, paths, 0, mode);
+    paths = dijkstrabis(begin, end, paths, 0, r_mode, s_mode);
     for(i=1;paths.ntrajets && i<paths.ntrajets;i++){
         j= find_new_shortest(paths.trajet+i*metro.nsta);
         if(j== UINT_MAX){
@@ -41,13 +41,13 @@ trajets dijkstra(unsigned int begin, unsigned int end, RUN_MODE mode){
             free(paths.trajet);
             return (trajets){NULL,0};
         }
-        paths = dijkstrabis(j, end, paths, i, mode);
+        paths = dijkstrabis(j, end, paths, i, r_mode, s_mode);
     }
     return dijkstra_sort(paths, end);
 }
 
 
-trajets dijkstrabis(unsigned int current, unsigned int end, trajets paths, unsigned int current_path, RUN_MODE mode){
+trajets dijkstrabis(unsigned int current, unsigned int end, trajets paths, unsigned int current_path, RUN_MODE r_mode, SEARCH_MODE s_mode){
     unsigned int distance, i, j, k, n, lines[metro.nli+1][2], extra_paths = paths.ntrajets, corr_num = metro.nsta;
     succ *corr;
     void * test;
@@ -59,7 +59,7 @@ trajets dijkstrabis(unsigned int current, unsigned int end, trajets paths, unsig
     if(current == end)
         return paths;
     
-    if(mode == SUCC_LIST){
+    if(r_mode == SUCC_LIST){
         corr=graph_list.noeuds[current].next;
         if(corr)
             corr_num = corr->car->num;
@@ -85,13 +85,17 @@ trajets dijkstrabis(unsigned int current, unsigned int end, trajets paths, unsig
                     }
                 }
                 if(i == metro.stations[corr_num].nlines){ //if line change
-                    distance++;
                     get_common_lines(current, corr_num, lines);
+                    if(s_mode == LEAST_TRANSFERS){
+                        distance+=1000;
+                    }
+                    else
+                        distance++;
                 }
             }
             else{ //current is first station or we got to it by walking so no current line
                 get_common_lines(current, corr_num, lines);
-                if(lines[0][0] == UINT_MAX) // if correspondence on foot
+                if(lines[0][0] == UINT_MAX && s_mode == QUICKEST) // if transfer on foot
                     distance ++;
             }
             if(distance < path[corr_num].distance){
@@ -132,12 +136,14 @@ trajets dijkstrabis(unsigned int current, unsigned int end, trajets paths, unsig
                 path = paths.trajet+current_path*metro.nsta;
                 if(!lines[0][1]){ //line hasn't changed
                     memcpy(paths.trajet+(paths.ntrajets-1)*metro.nsta, paths.trajet+current_path*metro.nsta, metro.nsta*sizeof(trajet));
+                    paths.trajet[(paths.ntrajets-1)*metro.nsta+corr_num].from = current;
                     paths.trajet[(paths.ntrajets-1)*metro.nsta+corr_num].line = n;
                     paths.trajet[(paths.ntrajets-1)*metro.nsta+corr_num].direction = path[current].direction;
                 }
                 else{
                     for(j=paths.ntrajets-i-1, i=0; j<paths.ntrajets; j++, i++){
                         memcpy(paths.trajet+j*metro.nsta, paths.trajet+current_path*metro.nsta, metro.nsta*sizeof(trajet));
+                        paths.trajet[j*metro.nsta+corr_num].from = current;
                         paths.trajet[j*metro.nsta+corr_num].line = lines[i][0];
                         paths.trajet[j*metro.nsta+corr_num].direction = lines[i][1]-2;
                     }
@@ -145,7 +151,7 @@ trajets dijkstrabis(unsigned int current, unsigned int end, trajets paths, unsig
             }
         }
         
-        if(mode == SUCC_LIST){
+        if(r_mode == SUCC_LIST){
             corr = corr->cdr;
             if(corr)
                 corr_num = corr->car->num;
@@ -170,7 +176,7 @@ trajets dijkstrabis(unsigned int current, unsigned int end, trajets paths, unsig
         free(paths.trajet);
         return (trajets){NULL,0};
     }
-    return dijkstrabis(j, end, paths, current_path, mode);
+    return dijkstrabis(j, end, paths, current_path, r_mode, s_mode);
 }
 
 void get_common_lines(unsigned int a, unsigned int b, unsigned int lines[][2]){

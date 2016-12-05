@@ -17,14 +17,14 @@ void display_stations(RUN_MODE mode){
     printf("\n\n%sSTATIONS :\n\n", codeFromStyle(GREEN));
 
     for(i=0;i<metro.nsta;i++){
-        printf("%s%s %s(", codeFromStyle(BLUE), metro.stations[i].name, codeFromStyle(DARKBLUE));
+        printf("%s%d : %s %s(", codeFromStyle(BLUE), i, metro.stations[i].name, codeFromStyle(DARKBLUE));
         for(j=0; j < metro.stations[i].nlines; j++){
             if(!j)
                 printf("%c%u", metro.lines[metro.stations[i].lines[j][0]].symbol, metro.stations[i].lines[j][1]);
             else
                 printf("/%c%u", metro.lines[metro.stations[i].lines[j][0]].symbol, metro.stations[i].lines[j][1]);
         }
-        printf(")%s Correspondence(s) :%s", codeFromStyle(PURPLE), codeFromStyle(MAGENTA));
+        printf(")%s Transfer(s) :%s", codeFromStyle(PURPLE), codeFromStyle(MAGENTA));
         
         switch(mode){
             case MATRIX:
@@ -47,7 +47,7 @@ void display_metro(RUN_MODE mode){
     printf("\n%s%s%s%s\n", codeFromStyle(BOLD), codeFromStyle(BRIGHTGREEN), metro.name, codeFromStyle(RESET));
     display_lines();
     display_stations(mode);
-    printf("%s\n\n\n", codeFromStyle(RESET));
+    printf("%s\n\n", codeFromStyle(RESET));
 }
 
 
@@ -84,18 +84,25 @@ void display_path(unsigned int begin, unsigned int end, trajet *path, unsigned i
     printf("%s\n\n", codeFromStyle(RESET));
 }
 
-void display_paths(unsigned int begin, unsigned int end, trajets paths){
+void display_paths(unsigned int begin, unsigned int end, trajets paths, SEARCH_MODE mode){
     unsigned int i;
     
     if(!paths.ntrajets){
         printf("There is no path from %s to %s or an error occured\n", metro.stations[begin].name, metro.stations[end].name);
         return;
     }
-    if(paths.ntrajets >1)
-        printf("The shortest paths from %s to %s are :\n", metro.stations[begin].name, metro.stations[end].name);
-    else
-        printf("The shortest path from %s to %s is :\n", metro.stations[begin].name, metro.stations[end].name);
-    for (i=0; i<paths.ntrajets; i++){
-        display_path(begin, end, paths.trajet+i*metro.nsta, i+1);
+    if(paths.ntrajets >1){
+        if(mode == QUICKEST)
+            printf("The shortest paths from %s to %s are :\n", metro.stations[begin].name, metro.stations[end].name);
+        else
+            printf("The paths with the least transfers from %s to %s are :\n", metro.stations[begin].name, metro.stations[end].name);
     }
+    else{
+        if(mode == QUICKEST)
+            printf("The shortest path from %s to %s is :\n", metro.stations[begin].name, metro.stations[end].name);
+        else
+            printf("The path with the least transfers from %s to %s is :\n", metro.stations[begin].name, metro.stations[end].name);
+    }
+    for (i=0; i<paths.ntrajets; i++)
+        display_path(begin, end, paths.trajet+i*metro.nsta, i+1);
 }

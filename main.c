@@ -12,13 +12,13 @@ int main(){
     if(i)
         print_error("Could not register function clean_mem");
 
+    
+
     mode = MATRIX;
     if(init_metro("tokyo.metro", mode))
       display_metro(mode);
     
     
-//     begin = 99;
-//     end = 24;
     
     for(begin=0; begin<metro.nsta; begin++){
         for(end=begin+1; end<metro.nsta; end++){

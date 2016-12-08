@@ -3,7 +3,8 @@
 
 trajets dijkstrabis(unsigned int, unsigned int, trajets, unsigned int, RUN_MODE, SEARCH_MODE);
 void get_common_lines(unsigned int, unsigned int, unsigned int lines[][2]);
-trajets dijkstra_sort(trajets, unsigned int);
+trajets dijkstra_sort(trajets, unsigned int, SEARCH_MODE);
+void transfer_sort(trajets, unsigned int);
 unsigned int find_new_shortest(trajet*);
 void change_paths(trajets, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, char);
 
@@ -43,7 +44,7 @@ trajets dijkstra(unsigned int begin, unsigned int end, RUN_MODE r_mode, SEARCH_M
         }
         paths = dijkstrabis(j, end, paths, i, r_mode, s_mode);
     }
-    return dijkstra_sort(paths, end);
+    return dijkstra_sort(paths, end, s_mode);
 }
 
 
@@ -74,7 +75,9 @@ trajets dijkstrabis(unsigned int current, unsigned int end, trajets paths, unsig
     }
     while(corr_num < metro.nsta){
         if(path[corr_num].unused){
-            distance = 1+path[current].distance;
+            distance = path[current].distance;
+            if(s_mode == QUICKEST)
+                distance++;
             if(path[current].direction){ //if current isn't the first station or one we got to by walking
                 for(i=0; i<metro.stations[corr_num].nlines; i++){
                     if(metro.stations[corr_num].lines[i][0] == metro.stations[current].lines[path[current].line][0]
@@ -96,7 +99,7 @@ trajets dijkstrabis(unsigned int current, unsigned int end, trajets paths, unsig
             else{ //current is first station or we got to it by walking so no current line
                 get_common_lines(current, corr_num, lines);
                 if(lines[0][0] == UINT_MAX && s_mode == QUICKEST) // if transfer on foot
-                    distance ++;
+                    distance++;
             }
             if(distance < path[corr_num].distance){
                 if(!lines[0][1]){ // if line doesn't change
@@ -236,24 +239,28 @@ unsigned int find_new_shortest(trajet *path){
 }
 
 
-trajets dijkstra_sort(trajets t1, unsigned int end){
-    unsigned int shortest_distance, i, j, size, final_size, station, station2, to_keep[t1.ntrajets];
+trajets dijkstra_sort(trajets paths, unsigned int end, SEARCH_MODE mode){
+    unsigned int shortest_distance, i, j, size, final_size, station, station2, to_keep[paths.ntrajets];
     trajets final;
     
-    if(!t1.ntrajets)
-        return t1;
-    shortest_distance = t1.trajet[end].distance;
+    if(!paths.ntrajets)
+        return paths;
+    shortest_distance = paths.trajet[end].distance;
     to_keep[0] = 0;
     size=1;
     
     //keep only the shortest paths, and count their number
-    for (i=1; i<t1.ntrajets; i++){
-        if(t1.trajet[i*metro.nsta+end].distance == shortest_distance){
+    
+    if(mode == LEAST_TRANSFERS)
+        transfer_sort(paths, end);
+        
+    for (i=1; i<paths.ntrajets; i++){
+        if(paths.trajet[i*metro.nsta+end].distance == shortest_distance){
             to_keep[size] = i;
             size++;
         }
-        else if(t1.trajet[i*metro.nsta+end].distance < shortest_distance){
-            shortest_distance = t1.trajet[i*metro.nsta+end].distance;
+        else if(paths.trajet[i*metro.nsta+end].distance < shortest_distance){
+            shortest_distance = paths.trajet[i*metro.nsta+end].distance;
             to_keep[0] = i;
             size=1;
         }
@@ -266,7 +273,7 @@ trajets dijkstra_sort(trajets t1, unsigned int end){
          for (j=i+1; j<size; j++){
              if(to_keep[j] == UINT_MAX)
                 continue;
-             for(station = end, station2 = end; station!=UINT_MAX && station2 != UINT_MAX; station = t1.trajet[to_keep[i]*metro.nsta+station].from, station2 = t1.trajet[to_keep[j]*metro.nsta+station2].from)
+             for(station = end, station2 = end; station!=UINT_MAX && station2 != UINT_MAX; station = paths.trajet[to_keep[i]*metro.nsta+station].from, station2 = paths.trajet[to_keep[j]*metro.nsta+station2].from)
                  if(station != station2)
                      break;;
              if(station == UINT_MAX && station2 == UINT_MAX){
@@ -280,60 +287,28 @@ trajets dijkstra_sort(trajets t1, unsigned int end){
     final.ntrajets = final_size;
     final.trajet = malloc(final_size*sizeof(trajet[metro.nsta]));
     if (!final.trajet){
-        free(t1.trajet);
+        free(paths.trajet);
         return (trajets){NULL, 0};
     }
     for(i=0, j=0; i<size && j<final_size; i++)
         if (to_keep[i] != UINT_MAX){
-            memcpy(final.trajet+j*metro.nsta, t1.trajet+to_keep[i]*metro.nsta, metro.nsta*sizeof(trajet));
+            memcpy(final.trajet+j*metro.nsta, paths.trajet+to_keep[i]*metro.nsta, metro.nsta*sizeof(trajet));
             j++;
         };
-    free(t1.trajet);
+    free(paths.trajet);
     return final;
 }
 
-//first version
-/*trajets dijkstra_list_sort(trajets t1, unsigned int end){
-    unsigned int shortest_distance, i, j, size;
-    unsigned char to_keep[t1.ntrajets];
-    trajets final;
+
+void transfer_sort(trajets paths, unsigned int end){
+    unsigned int i, j;
     
-    if(!t1.ntrajets)
-        return t1;
-    memset(to_keep, 0, t1.ntrajets*sizeof(char));
-    shortest_distance = t1.trajet[end].distance;
-    to_keep[0] = 1;
-    size=1;
-    
-    //keep only the shortest paths, and count their number
-    for (i=1; i<t1.ntrajets; i++){
-        if(t1.trajet[i*metro.nsta+end].distance == shortest_distance){
-            size++;
-            to_keep[i] = 1;
-        }
-        else if(t1.trajet[i*metro.nsta+end].distance < shortest_distance){
-            for(j=0; j<i; j++)
-                to_keep[j] = 0;
-            shortest_distance = t1.trajet[i*metro.nsta+end].distance;
-            to_keep[i] = 1;
-            size=1;
+    for(i=0; i<paths.ntrajets; i++){
+        for (j=end; j!=UINT_MAX; j=paths.trajet[i*metro.nsta+j].from){
+            if(!paths.trajet[i*metro.nsta+j].direction)
+                paths.trajet[i*metro.nsta+end].distance +=2;
+            else
+                paths.trajet[i*metro.nsta+end].distance++;
         }
     }
-    
-    final.ntrajets = size;
-    final.trajet = malloc(size*sizeof(trajet[metro.nsta]));
-    if (!final.trajet){
-        free(t1.trajet);
-        return (trajets){NULL, 0};
-    }
-    for(i=0, j=0; i<size; i++){
-        for(; j<t1.ntrajets; j++){
-            if(to_keep[j]){
-                    memcpy(final.trajet+i*metro.nsta, t1.trajet+j*metro.nsta, metro.nsta*sizeof(trajet));
-                    break;
-            }
-        }
-    }
-    free(t1.trajet);
-    return final;
-}*/
+}

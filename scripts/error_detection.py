@@ -1,8 +1,8 @@
 # coding: utf-8
 import re, ipdb
 
-# script qui permet de vérifier que toutes les correspondance de chaque stations existe bien
-# et a bien une corespondance dans le sens inverse
+"""script qui permet de vérifier que toutes les correspondance de chaque stations existe bien
+et a bien une corespondance dans le sens inverse"""
 
 error = 0
 with open("../tokyo.metro", 'r+') as source:

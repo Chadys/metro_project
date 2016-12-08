@@ -56,7 +56,7 @@ void display_path(unsigned int begin, unsigned int end, trajet *path, unsigned i
     int dir = 2;
     
     //make each station keep the station they go to instead of the station they're from, for display purpose
-    // !! modifications are done on the path itself, they change it !!
+    // !! modifications are done on the path itself, they change it, so you can't call this function twice !!
     while(to != begin){
         prec = path[it].from;
         path[it].from = to;
@@ -95,13 +95,13 @@ void display_paths(unsigned int begin, unsigned int end, trajets paths, SEARCH_M
         if(mode == QUICKEST)
             printf("The shortest paths from %s to %s are :\n", metro.stations[begin].name, metro.stations[end].name);
         else
-            printf("The paths with the least transfers from %s to %s are :\n", metro.stations[begin].name, metro.stations[end].name);
+            printf("The paths with the least transfers (%u transfer(s)) from %s to %s are :\n", paths.trajet[end].distance/1000, metro.stations[begin].name, metro.stations[end].name);
     }
     else{
         if(mode == QUICKEST)
             printf("The shortest path from %s to %s is :\n", metro.stations[begin].name, metro.stations[end].name);
         else
-            printf("The path with the least transfers from %s to %s is :\n", metro.stations[begin].name, metro.stations[end].name);
+            printf("The path with the least transfers (%u transfer(s))  from %s to %s is :\n", paths.trajet[end].distance/1000, metro.stations[begin].name, metro.stations[end].name);
     }
     for (i=0; i<paths.ntrajets; i++)
         display_path(begin, end, paths.trajet+i*metro.nsta, i+1);

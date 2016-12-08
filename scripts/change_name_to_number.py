@@ -1,8 +1,8 @@
 # coding: utf-8
 import re
 
-# script permettant de changer la  structure du fichier du métro ("N01 = Meguro" devient "Meguro:N01")
-# ainsi que de renommer les correspondances par leur index dans la liste des stations
+"""Script permettant de changer la  structure du fichier du métro ("N01 = Meguro" devient "Meguro:N01")
+ainsi que de renommer les correspondances par leur index dans la liste des stations"""
 
 with open("../tokyo.metro", 'r+') as source:
     data=source.read()

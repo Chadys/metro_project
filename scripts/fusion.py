@@ -1,7 +1,7 @@
 # coding: utf-8
 import os, sys, re
 
-# script qui permet de fusionner les stations qui sont les mêmes mais présentes sur plusieurs lignes du métro
+"""script qui permet de fusionner les stations qui sont les mêmes mais présentes sur plusieurs lignes du métro"""
 
 def fusion(stations):
 	test, result = '',''

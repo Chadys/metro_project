@@ -1,11 +1,12 @@
 # coding: utf-8
 import re
 
-# script qui m'a servi à trier les stations par ordre alphabétique
+"""script qui m'a servi à trier les stations par ordre alphabétique"""
 
-# opérateur de comparaison personnel, qui permet de trier les stations selon leur nom,
-# sans compter leur code de ligne ('G06 = ', 'M15 = ', ...)
 def key(a):
+    """opérateur de comparaison personnel, qui permet de trier les stations selon leur nom,
+    sans compter leur code de ligne ('G06 = ', 'M15 = ', ...)"""
+    
     regex=re.compile(r'[\w/]{2,} = ([A-Za-z\-]+)')
     match=re.search(regex,a)
     if match:

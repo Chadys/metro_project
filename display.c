@@ -101,7 +101,7 @@ void display_paths(unsigned int begin, unsigned int end, trajets paths, SEARCH_M
         if(mode == QUICKEST)
             printf("The shortest path from %s to %s is :\n", metro.stations[begin].name, metro.stations[end].name);
         else
-            printf("The path with the least transfers (%u transfer(s))  from %s to %s is :\n", paths.trajet[end].distance/1000, metro.stations[begin].name, metro.stations[end].name);
+            printf("The path with the least transfers (%u transfer(s)) from %s to %s is :\n", paths.trajet[end].distance/1000, metro.stations[begin].name, metro.stations[end].name);
     }
     for (i=0; i<paths.ntrajets; i++)
         display_path(begin, end, paths.trajet+i*metro.nsta, i+1);

@@ -10,146 +10,187 @@ N=Namboku Line
 T=Tozai Line
 Y=Yurakucho Line
 
-Akabane-iwabuchi:N19 106
-Akasaka:C06 53 88
-Akasaka-mitsuke:G05/M13 4 136 121 71 53
-Akihabara:H15 51 73
-Aoyama-itchome:G04/Z03 94 71 2 14
-Asakusa:G19 123
-Awajicho:M19 110 89 96
-Ayase:C19 49 47
-Azabu-juban:N04 98 103
-Baraki-nakayama:T22 69 82
-Chikatetsu-akatsuka:F03/Y03 21 11
-Chikatetsu-narimasu:F02/Y02 134 10
-Ebisu:H02 28 72
-Edogawabashi:Y12 33 17
-Gaiemmae:G03 94 4
-Ginza:G09/H08/M16 23 43 105 125 22 58
-Ginza-itchome:Y19 115 140
-Gokokuji:Y11 24 13
-Gyotoku:T20 69 63
-Hanzomon:Z05 57 71
-Hatchobori:H11 129 44
-Heiwadai:F04/Y04 27 10
-Hibiya:C09/H07 43 80 140 15
-Higashi-ginza:H09 129 15
-Higashi-ikebukuro:Y10 34 17
-Higashi-koenji:M04 109 108
-Higashi-shinjuku:F12 114 86
-Hikawadai:F05/Y05 21 56
-Hiro-o:H03 12 97
-Hon-komagome:N13 124 54
-Honancho:m03 75
-Hongo-sanchome:M21 89 55
-Ichigaya:N09/Y14 52 33 136
-Iidabashi:N10/T06/Y13 13 57 38 55 32
-Ikebukuro:F09/M25/Y09 111 40 142 24
-Inaricho:G17 131 123
-Iriya:H18 131 66
-Jimbocho:Z07 57 96
-Kagurazaka:T05 33 135
-Kamiyacho:H05 43 97
-Kanamecho:F08/Y08 34 101
-Kanda:G13 116 67
-Kasai:T17 83 133
-Kasumigaseki:C08/H06/M15 22 53 15 39
-Kayabacho:H12/T11 79 20 81 68
-Kiba:T13 127 68
-Kinshicho:Z13 95 118
-Kita-ayase:C20 7
-Kita-sando:F14 114 61
-Kita-senju:C18/H21 7 59 64
-Kiyosumi-shirakawa:Z11 118 117
-Kodemmacho:H14 81 3
-Kojimachi:Y15 71 32
-Kokkai-gijidomae:C07/M14 43 121 2 1
-Komagome:N14 29 87
-Korakuen:M22/N11 124 33 31 70
-Kotake-mukaihara:F06/Y06 27 101
-Kudanshita:T07/Z06 33 37 120 19
-Kyobashi:G10 79 15
-Machiya:C17 49 84
-Meguro:N01 104
-Meiji-jingumae:C03/F15 94 138 102 48
-Minami-asagaya:M02 108 91
-Minami-gyotoku:T19 18 133
-Minami-senju:H20 66 49
-Minami-sunamachi:T15 127 83
-Minowa:H19 36 64
-Mitsukoshimae:G12/Z09 79 41 117 96
-Monzen-nakacho:T12 44 45
-Myoden:T21 18 9
-Myogadani:M23 111 55
-Nagatacho:N07/Y16/Z04 19 4 2 121 52 136 99
-Naka-meguro:H01 12
-Naka-okachimachi:H16 131 132 3
-Nakano:T01 90
-Nakano-fujimicho:m04 77 30
-Nakano-sakaue:M06 85 109 77
-Nakano-shimbashi:m05 76 75
-Nezu:C14 141 100
-Nihombashi:G11/T10 67 44 96 58
-Nijubashimae:C10 22 96
-Ningyocho:H13 51 44
-Nishi-funabashi:T23 9
-Nishi-kasai:T16 65 42
-Nishi-nippori:C16 59 100
-Nishi-shinjuku:M07 76 112
-Nishi-waseda:F11 26 142
-Nishigahara:N15 92 54
-Nogizaka:C05 94 1
-Ochanomizu:M20 6 31
-Ochiai:T02 119 74
-Ogikubo:M01 62
-Oji:N16 93 87
-Oji-kamiya:N17 106 92
-Omote-sando:C04/G02/Z02 4 61 88 102 14
-Oshiage:Z14 46
-Otemachi:C11/M18/T09/Z08 120 67 37 79 125 6 110 80
-Roppongi:H04 28 39
-Roppongi-itchome:N05 8 121
-Sakuradamon:Y17 71 140
-Sendagi:C15 84 78
-Senkawa:F07/Y07 40 56
-Shibuya:F16/Z01/G01 94 61
-Shikane-takanawa:N03 8 104
-Shikanedai:N02 60 103
-Shimbashi:G08 126 15
-Shimo:N18 0 93
-Shin-kiba:Y24 122
-Shin-koenji:M03 25 62
-Shin-nakano:M05 76 25
-Shin-ochanomizu:C12 141 6 96
-Shin-otsuka:M24 34 70
-Shinjuku:M08 85 114
-Shinjuku-gyoemmae:M10 137 114
-Shinjuku-sanchome:M09/F13 26 48 112 113
-Shintomicho:Y20 130 16
-Suehirocho:G14 132 41
-Suitengumae:Z10 67 50
-Sumiyoshi:Z12 46 50
-Takadanobaba:T03 135 90
-Takebashi:T08 57 96
-Tameike-sanno:G06/N06 98 71 126 53 2
-Tatsumi:Y23 128 107
-Tawaramachi:G18 35 5
-Todaimae:N12 29 55
-Tokyo:M17 15 96
-Toranomon:G07 121 105
-Toyocho:T14 65 45
-Toyosu:Y22 130 122
-Tsukiji:H10 20 23
-Tsukishima:Y21 115 128
-Ueno:G16/H17 35 36 132 73
-Ueno-hirokoji:G15 131 116 73
-Urayasu:T18 42 63
-Wakoshi:F01/Y01 11
-Waseda:T04 38 119
-Yotsuya:M12/N08 137 71 2 32
-Yotsuya-sanchome:M11 113 136
-Yoyogi-koen:C02 139 61
-Yoyogi-uehara:C01 138
-Yurakucho:Y18 99 22 16
-Yushima:C13 110 78
-Zoshigaya:F10 34 86
+Akabane-iwabuchi:N19 142
+Akasaka:C06 72 116
+Akasaka-mitsuke:G05 5 158 96 97 98 3
+Akasaka-mitsuke:M13 176 96 97 98 73 2
+Akihabara:H15 70 100
+Aoyama-itchome:G04 123 2 18 6
+Aoyama-itchome:Z03 124 98 5
+Asakusa:G19 161
+Awajicho:M19 146 117 127
+Ayase:C19 67 65
+Azabu-juban:N04 131 139
+Baraki-nakayama:T22 94 110
+Chikatetsu-akatsuka:F03 27 14 13
+Chikatetsu-akatsuka:Y03 28 15 12
+Chikatetsu-narimasu:F02 173 12 15
+Chikatetsu-narimasu:Y02 174 13 14
+Ebisu:H02 37 99
+Edogawabashi:Y12 45 23
+Gaiemmae:G03 123 5
+Ginza:G09 141 81 20 21
+Ginza:H08 31 59 30 19 21
+Ginza:M16 60 163 19 20
+Ginza-itchome:Y19 152 181
+Gokokuji:Y11 32 17
+Gyotoku:T20 94 87
+Hanzomon:Z05 80 98
+Hatchobori:H11 167 61
+Heiwadai:F04 35 12 28
+Heiwadai:Y04 36 13 27
+Hibiya:C09 58 108 181 30
+Hibiya:H07 59 181 20 29
+Higashi-ginza:H09 167 20
+Higashi-ikebukuro:Y10 48 23
+Higashi-koenji:M04 145 144
+Higashi-shinjuku:F12 151 114
+Hikawadai:F05 27 77 36
+Hikawadai:Y05 28 78 35
+Hiro-o:H03 16 130
+Hon-komagome:N13 162 74
+Honancho:m03 102
+Hongo-sanchome:M21 117 75
+Ichigaya:N09 43 177 42
+Ichigaya:Y14 71 45 41
+Iidabashi:N10 76 41 44 45
+Iidabashi:T06 79 52 43 45
+Iidabashi:Y13 17 42 43 44
+Ikebukuro:F09 54 183 47 48
+Ikebukuro:M25 147 46 48
+Ikebukuro:Y09 55 32 46 47
+Inaricho:G17 169 161
+Iriya:H18 170 90
+Jimbocho:Z07 80 129
+Kagurazaka:T05 44 175
+Kamiyacho:H05 59 130
+Kanamecho:F08 46 134 55
+Kanamecho:Y08 48 135 54
+Kanda:G13 153 91
+Kasai:T17 111 172
+Kasumigaseki:C08 29 72 59 60
+Kasumigaseki:H06 30 20 53 58 60
+Kasumigaseki:M15 73 21 58 59
+Kayabacho:H12 26 109 62
+Kayabacho:T11 107 93 61
+Kiba:T13 165 93
+Kinshicho:Z13 125 155
+Kita-ayase:C20 9
+Kita-sando:F14 151 85
+Kita-senju:C18 9 82 68
+Kita-senju:H21 88 67
+Kiyosumi-shirakawa:Z11 155 154
+Kodemmacho:H14 109 4
+Kojimachi:Y15 97 42
+Kokkai-gijidomae:C07 58 158 159 1 73
+Kokkai-gijidomae:M14 60 158 159 3 72
+Komagome:N14 38 115
+Korakuen:M22 40 95 76
+Korakuen:N11 162 43 75
+Kotake-mukaihara:F06 35 134 78
+Kotake-mukaihara:Y06 36 135 77
+Kudanshita:T07 44 157 80
+Kudanshita:Z06 51 25 79
+Kyobashi:G10 106 19
+Machiya:C17 67 112
+Meguro:N01 140
+Meiji-jingumae:C03 122 179 85
+Meiji-jingumae:F15 136 66 84
+Minami-asagaya:M02 144 119
+Minami-gyotoku:T19 24 172
+Minami-senju:H20 90 68
+Minami-sunamachi:T15 165 111
+Minowa:H19 50 88
+Mitsukoshimae:G12 106 56 92
+Mitsukoshimae:Z09 154 129 91
+Monzen-nakacho:T12 62 63
+Myoden:T21 24 11
+Myogadani:M23 147 75
+Nagatacho:N07 2 3 159 177 97 98
+Nagatacho:Y16 2 3 71 132 96 98
+Nagatacho:Z04 25 6 2 3 96 97
+Naka-meguro:H01 16
+Naka-okachimachi:H16 170 171 4
+Nakano:T01 118
+Nakano-fujimicho:m04 104 39
+Nakano-sakaue:M06 113 145 104
+Nakano-shimbashi:m05 103 102
+Nezu:C14 182 133
+Nihombashi:G11 91 81 107
+Nihombashi:T10 62 128 106
+Nijubashimae:C10 29 126
+Ningyocho:H13 70 61
+Nishi-funabashi:T23 11
+Nishi-kasai:T16 89 57
+Nishi-nippori:C16 82 133
+Nishi-shinjuku:M07 103 148
+Nishi-waseda:F11 34 183
+Nishigahara:N15 120 74
+Nogizaka:C05 122 1
+Ochanomizu:M20 8 40
+Ochiai:T02 156 101
+Ogikubo:M01 86
+Oji:N16 121 115
+Oji-kamiya:N17 142 120
+Omote-sando:C04 84 116 123 124
+Omote-sando:G02 5 138 18 122 124
+Omote-sando:Z02 6 137 122 123
+Oshiage:Z14 64
+Otemachi:C11 146 108 127 128 129
+Otemachi:M18 163 8 126 128 129
+Otemachi:T09 157 107 126 127 129
+Otemachi:Z08 92 51 126 127 128
+Roppongi:H04 37 53
+Roppongi-itchome:N05 10 159
+Sakuradamon:Y17 97 181
+Sendagi:C15 112 105
+Senkawa:F07 54 77 135
+Senkawa:Y07 55 78 134
+Shibuya:F16 85 137 138
+Shibuya:Z01 124 136 138
+Shibuya:G01 123 136 137
+Shikane-takanawa:N03 10 140
+Shikanedai:N02 83 139
+Shimbashi:G08 164 19
+Shimo:N18 0 121
+Shin-kiba:Y24 160
+Shin-koenji:M03 33 86
+Shin-nakano:M05 103 33
+Shin-ochanomizu:C12 182 8 126
+Shin-otsuka:M24 47 95
+Shinjuku:M08 113 150
+Shinjuku-gyoemmae:M10 178 150
+Shinjuku-sanchome:M09 148 149 151
+Shinjuku-sanchome:F13 34 66 150
+Shintomicho:Y20 168 22
+Suehirocho:G14 171 56
+Suitengumae:Z10 92 69
+Sumiyoshi:Z12 64 69
+Takadanobaba:T03 175 118
+Takebashi:T08 79 128
+Tameike-sanno:G06 164 72 73 2 159
+Tameike-sanno:N06 131 96 72 73 158
+Tatsumi:Y23 166 143
+Tawaramachi:G18 49 7
+Todaimae:N12 38 76
+Tokyo:M17 21 127
+Toranomon:G07 158 141
+Toyocho:T14 89 63
+Toyosu:Y22 168 160
+Tsukiji:H10 26 31
+Tsukishima:Y21 152 166
+Ueno:G16 49 171 170
+Ueno:H17 50 100 169
+Ueno-hirokoji:G15 169 153 100
+Urayasu:T18 57 87
+Wakoshi:F01 14 174
+Wakoshi:Y01 15 173
+Waseda:T04 52 156
+Yotsuya:M12 178 3 177
+Yotsuya:N08 96 41 176
+Yotsuya-sanchome:M11 149 176
+Yoyogi-koen:C02 180 84
+Yoyogi-uehara:C01 179
+Yurakucho:Y18 132 29 30 22
+Yushima:C13 146 105
+Zoshigaya:F10 46 114

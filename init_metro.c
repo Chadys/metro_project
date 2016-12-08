@@ -181,63 +181,46 @@ char init_stations(FILE *file, size_t final_size /* number of stations */, RUN_M
 }
 
 
-// Add all the lines a station belongs to and its number on each line
+// Add the line a station belongs to and its number on that line
 char init_station_line(FILE* file){
-    unsigned int i=0, max_buff=metro.nli*4, j;
-    char c, *line[metro.nli], buffer[max_buff]; //car une ligne est représenté par 1 lettre, 2 chiffre et 1 séparateur + '\0' final
+    unsigned int i=0, max_buff=4, j;
+    char c, line[max_buff]; //car une ligne est représenté par 1 lettre, 2 chiffre et 1 séparateur + '\0' final
 
-    // Récupère la chaîne qui représente toutes les lignes auxquelles appartient une station (ex :"C08/H06/M15")
+    // Récupère la chaîne qui représente toutes la ligne à laquelle appartient une station (ex :"C08")
     while((c=fgetc(file)) != ' '){
         if(i>max_buff-2){ //pour laisser la place pour le '\0'
             fprintf(stderr, "%s%sError : %s%sInvalid subway file, invalid station's line format, station %s%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, codeFromStyle(RESET));
             return 0;
         }
-        buffer[i]=c;
+        line[i]=c;
         i++;
     }
-    buffer[i]='\0';
-
-    // Sépare les différentes lignes
-    i=0;
-    line[0] = strtok(buffer, "/");
-    for(i = 1; line[i-1] != NULL; i++){
-        if(i>=metro.nli){
-            fprintf(stderr, "%s%sError : %s%sInvalid subway file, too many lines for one station, station %s%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, codeFromStyle(RESET));
-            return 0;
-        }
-        line[i] = strtok(NULL, "/");
-    }
+    line[i]='\0';
 
     // Ajoute chaque ligne à la liste de lignes de la station en cours de construction
-    metro.stations[metro.nsta].lines = getmem(i-1,sizeof(unsigned int[2]));
-    metro.stations[metro.nsta].nlines = i-1;
-    if (!metro.stations[metro.nsta].lines)
+    if(!isalpha(line[0])){
+        fprintf(stderr, "%s%sError : %s%sInvalid subway file, wrong station's line format, first character is not a letter, station %s, line %c%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, line[0], codeFromStyle(RESET));
         return 0;
-    for(i=0;line[i]; i++){
-        if(!isalpha(line[i][0])){
-            fprintf(stderr, "%s%sError : %s%sInvalid subway file, wrong station's line format, first character is not a letter, station %s, line %s%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, line[i], codeFromStyle(RESET));
-            return 0;
-        }
-        for (j=1; line[i][j]!='\0'; j++)
-            if(!isdigit(line[i][j])){
-                fprintf(stderr, "%s%sError : %s%sInvalid subway file, wrong station's line format, station's number contain non digit character, station %s, line %s%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, line[i], codeFromStyle(RESET));
-                return 0;
-            };
-        if(j==1){
-            fprintf(stderr, "%s%sError : %s%sInvalid subway file, wrong station's line format, missing station's number, station %s, line %s%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, line[i], codeFromStyle(RESET));
-            return 0;
-        }
-        line[i][0] = toupper(line[i][0]); //for forked lines (like the Marunouchi Line, having a 'M' and 'm' branch
-        for(j=0;j<metro.nli;j++)
-            if(metro.lines[j].symbol == line[i][0])
-                break;;
-        if(j == metro.nli){
-            fprintf(stderr, "%s%sError : %s%sInvalid subway file, wrong station's line format, line doesn't exists, station %s, line %s%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, line[i], codeFromStyle(RESET));
-            return 0;
-        }
-        metro.stations[metro.nsta].lines[i][0]=j;
-        metro.stations[metro.nsta].lines[i][1]=(unsigned int) strtoul(line[i]+1,NULL,10);
     }
+    for (j=1; line[j]!='\0'; j++)
+        if(!isdigit(line[j])){
+            fprintf(stderr, "%s%sError : %s%sInvalid subway file, wrong station's line format, station's number contain non digit character, station %s, line %c%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, line[0], codeFromStyle(RESET));
+            return 0;
+        };
+    if(j==1){
+        fprintf(stderr, "%s%sError : %s%sInvalid subway file, wrong station's line format, missing station's number, station %s, line %c%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, line[0], codeFromStyle(RESET));
+        return 0;
+    }
+    line[0] = toupper(line[0]); //for forked lines (like the Marunouchi Line, having a 'M' and 'm' branch
+    for(j=0;j<metro.nli;j++)
+        if(metro.lines[j].symbol == line[0])
+            break;;
+    if(j == metro.nli){
+        fprintf(stderr, "%s%sError : %s%sInvalid subway file, wrong station's line format, line doesn't exists, station %s, line %c%s\n",codeFromStyle(BOLD), codeFromStyle(RED), codeFromStyle(RESET), codeFromStyle(RED),  metro.stations[metro.nsta].name, line[0], codeFromStyle(RESET));
+        return 0;
+    }
+    metro.stations[metro.nsta].line[0]=j;
+    metro.stations[metro.nsta].line[1]=(unsigned int) strtoul(line+1,NULL,10);
     return 1;
 }
 
@@ -302,87 +285,3 @@ char init_station_graph(FILE *file, size_t final_size /* number of stations */, 
         
     return 1;
 }
-
-
-/* First try with static arrays
-
-char init_metro(char * filename){
-    char buffer [MAX_CHAR_READ], *test, *tokens[MAX_CHAR_READ], *lines[MAX_CHAR_READ];
-    size_t buffer_size, name_size;
-    FILE * file;
-    int i, j;
-
-    file=fopen(filename, "r");
-    if(!file){
-        perror("fopen");
-        return 0;
-    }
-    metro.nli=0;
-    metro.nsta=0;
-
-    // SUBWAY LINES
-    while(test=fgets(buffer, MAX_CHAR_READ, file) && buffer[0] != '\n'){
-        if(metro.nli>=MAX_LINES){
-            fprintf(stderr,"Too many subway lines.\n")
-            return 0;
-        }
-        if(buffer_size=strlen(buffer) < 3 || buffer[1]!='='){
-            fprintf(stderr, "Invalid subway line, on line %u\n", metro.nli);
-            return 0;
-        }
-        metro.lines[metro.nli].symbol=buffer[0];
-        name_size = buffer_size-2 > MAX_LINE_NAME ? MAX_LINE_NAME : buffer_size-2;
-        strncpy(metro.lines[metro.nli].name, buffer+2, name_size);
-        metro.lines[metro.nli].name[name_size-1]='\0'; // remplace le '\n' final
-        while(buffer[buffer_size-1] != '\n'){
-            test=fgets(buffer, MAX_CHAR_READ, file);
-            if (!test){
-                perror("fgets");
-                fprintf(stderr, "Unexpected end of parsing, line %u\n", metro.nli);
-                return 0;
-            }
-            buffer_size=strlen(buffer);
-        }
-        metro.nli++;
-    }
-
-    // SUBWAY STATIONS
-    while(test=fgets(buffer, MAX_CHAR_READ, file)){
-        if(metro.sta>=MAX_STATIONS){
-            fprintf(stderr,"Too many subway stations.\n")
-            return 0;
-        }
-        buffer_size=strlen(buffer);
-        name_size = strcspn(buffer, ":");
-        if (!name_size || name_size == buffer_size || name_size +2 < buffer_size){
-            fprintf(stderr, "Invalid subway station, on line %u\n", metro.nli+1+metro.nsta);
-            return 0;
-        }
-        tokens[0] = strtok(buffer+name_size+1, " ");
-        for(i = 1; tokens[i-1] != NULL; i++)
-            tokens[i] = strtok(NULL, " ");
-
-        lines[0] = strtok(tokens[0], "/");
-        for(i = 1; lines[i-1] != NULL; i++)
-            lines[i] = strtok(NULL, "/");
-
-        for(i = 0; lines[i] != NULL; i++){
-            if(strlen(lines[i])<2){
-                fprintf(stderr, "Invalid subway station, on line %u\n", metro.nli+1+metro.nsta);
-                return 0;
-            }
-            for (j=0 ; j < metro.nli || metro.lines[j].symbol != lines[i][0] ; j++);
-            if (j == metro.nli){
-                fprintf(stderr, "Invalid subway station, on line %u, subway line not found\n", metro.nli+1+metro.nsta);
-                return 0;
-            }
-            metro.stations[metro.nsta].lines[i][0] = j;
-            metro.stations[metro.nsta].lines[i][1] = (unsigned char) strtoul(lines[i]+1,NULL,10);
-        }
-
-        if (name_size>MAX_STATION_NAME) name_size=MAX_STATION_NAME;
-        strncpy(metro.stations[metro.nsta].name, buffer, name_size);
-        metro.nsta++;
-    }
-}
-*/

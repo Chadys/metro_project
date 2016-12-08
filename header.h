@@ -54,24 +54,6 @@ typedef struct graphmatrix{
 
 /*** All subway's info ***/
 
-/* First version with static arrays
-
-typedef struct line{
-    char symbol;
-    char name [MAX_LINE_NAME];
-} line;
-
-typedef struct station{
-    unsigned char line[MAX_STATION_LINES][2]; //the line this station belongs to, line[i][0] is the lines index, line[i][1] is the station's number on that line
-    char name [MAX_LINE_NAME];
-} station;
-
-typedef struct metro{
-    station stations [MAX_STATIONS];
-    unsigned int nsta;
-    line lines [MAX_LINES];
-    unsigned int nli;
-} metro;*/
 
 typedef struct line{
     char symbol;
@@ -79,8 +61,7 @@ typedef struct line{
 } line;
 
 typedef struct station{
-    unsigned int (* lines)[2]; //the line this station belongs to, line[i][0] is the lines index, line[i][1] is the station's number on that line
-    unsigned int nlines;
+    unsigned int line[2]; //the line this station belongs to, line[0] is the lines index, line[1] is the station's number on that line
     char * name;
 } station;
 
@@ -99,23 +80,7 @@ typedef struct trajet {
     unsigned int from;
     unsigned int distance;
     unsigned char unused;
-    unsigned int line; // line index in this station lines' list
-    char direction;
 } trajet;
-
-typedef struct divergence{
-    unsigned int station;
-    unsigned int distance;
-    unsigned int line;
-    char direction;
-} divergence;
-
-typedef struct trajets{
-    trajet *trajet;
-    unsigned int ntrajets;
-    divergence *diff;
-    unsigned int ndiff;
-} trajets;
 
 
 /*** Other ***/
@@ -226,12 +191,12 @@ char init_metro(char* filename, RUN_MODE);
 
 /* dijkstra.c */
 // The Dijkstra algorithm to find all shortest path
-trajets dijkstra(unsigned int, unsigned int, RUN_MODE, SEARCH_MODE);
+trajet *dijkstra(unsigned int, unsigned int, RUN_MODE, SEARCH_MODE);
 
 /* display.c */
 // All display functions
 void display_metro(RUN_MODE);
-void display_paths(unsigned int, unsigned int, trajets, SEARCH_MODE);
+void display_path(unsigned int, unsigned int, trajet*, SEARCH_MODE);
 
 /* user_input.c */
 // Management of interactions with the user

@@ -3,7 +3,7 @@
 
 int main(){
     int i;
-    trajets paths;
+    trajet *path;
     unsigned int begin, end;
     RUN_MODE r_mode;
     SEARCH_MODE s_mode;
@@ -30,12 +30,10 @@ int main(){
         start = clock();
         for(begin=0; begin<metro.nsta; begin++){
             for(end=begin+1; end<metro.nsta; end++){
-                paths = dijkstra(begin, end, SUCC_LIST, s_mode);
+                path = dijkstra(begin, end, SUCC_LIST, s_mode);
         
-                if(paths.ntrajets){
-                    paths.ntrajets = 0;
-                    free(paths.trajet);
-                }
+                if(path)
+                    free(path);
             }
         }
         stop = clock();
@@ -46,12 +44,10 @@ int main(){
         start = clock(); 
         for(begin=0; begin<metro.nsta; begin++){
             for(end=begin+1; end<metro.nsta; end++){
-                paths = dijkstra(begin, end, MATRIX, s_mode);
+                path = dijkstra(begin, end, MATRIX, s_mode);
         
-                if(paths.ntrajets){
-                    paths.ntrajets = 0;
-                    free(paths.trajet);
-                }
+                if(path)
+                    free(path);
             }
         }
         stop = clock();
@@ -67,14 +63,12 @@ int main(){
         begin = get_station();
         printf("You need to choose the station of arrival.\n");
         end = get_station();
-        paths = dijkstra(begin, end, r_mode, s_mode);
+        path = dijkstra(begin, end, r_mode, s_mode);
             
-        display_paths(begin, end, paths, s_mode);
+        display_path(begin, end, path, s_mode);
         
-        if(paths.ntrajets){
-            paths.ntrajets = 0;
-            free(paths.trajet);
-        }
+        if(path)
+            free(path);
         printf("\nHere you are ! Back to a new search, you can still quit anytime with 'q'\n\n");
     }
     

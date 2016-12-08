@@ -1,7 +1,7 @@
 # coding: utf-8
 import re, fusion
 
-# script utile pour appeler la fonction de fusion sur chaque station de métro présent en double
+"""script utile pour appeler la fonction de fusion sur chaque station de métro présent en double"""
 
 with open("../tokyo.metro", 'r') as source:
 	data=source.readlines()

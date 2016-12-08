@@ -1,0 +1,155 @@
+Tokyo Metro
+
+C=Chiyoda Line
+F=Fukutoshin Line
+G=Ginza Line
+Z=Hanzomon Line
+H=Hibiya Line
+M=Marunouchi Line
+N=Namboku Line
+T=Tozai Line
+Y=Yurakucho Line
+
+Akabane-iwabuchi:N19 106
+Akasaka:C06 53 88
+Akasaka-mitsuke:G05/M13 4 136 121 71 53
+Akihabara:H15 51 73
+Aoyama-itchome:G04/Z03 94 71 2 14
+Asakusa:G19 123
+Awajicho:M19 110 89 96
+Ayase:C19 49 47
+Azabu-juban:N04 98 103
+Baraki-nakayama:T22 69 82
+Chikatetsu-akatsuka:F03/Y03 21 11
+Chikatetsu-narimasu:F02/Y02 134 10
+Ebisu:H02 28 72
+Edogawabashi:Y12 33 17
+Gaiemmae:G03 94 4
+Ginza:G09/H08/M16 23 43 105 125 22 58
+Ginza-itchome:Y19 115 140
+Gokokuji:Y11 24 13
+Gyotoku:T20 69 63
+Hanzomon:Z05 57 71
+Hatchobori:H11 129 44
+Heiwadai:F04/Y04 27 10
+Hibiya:C09/H07 43 80 140 15
+Higashi-ginza:H09 129 15
+Higashi-ikebukuro:Y10 34 17
+Higashi-koenji:M04 109 108
+Higashi-shinjuku:F12 114 86
+Hikawadai:F05/Y05 21 56
+Hiro-o:H03 12 97
+Hon-komagome:N13 124 54
+Honancho:m03 75
+Hongo-sanchome:M21 89 55
+Ichigaya:N09/Y14 52 33 136
+Iidabashi:N10/T06/Y13 13 57 38 55 32
+Ikebukuro:F09/M25/Y09 111 40 142 24
+Inaricho:G17 131 123
+Iriya:H18 131 66
+Jimbocho:Z07 57 96
+Kagurazaka:T05 33 135
+Kamiyacho:H05 43 97
+Kanamecho:F08/Y08 34 101
+Kanda:G13 116 67
+Kasai:T17 83 133
+Kasumigaseki:C08/H06/M15 22 53 15 39
+Kayabacho:H12/T11 79 20 81 68
+Kiba:T13 127 68
+Kinshicho:Z13 95 118
+Kita-ayase:C20 7
+Kita-sando:F14 114 61
+Kita-senju:C18/H21 7 59 64
+Kiyosumi-shirakawa:Z11 118 117
+Kodemmacho:H14 81 3
+Kojimachi:Y15 71 32
+Kokkai-gijidomae:C07/M14 43 121 2 1
+Komagome:N14 29 87
+Korakuen:M22/N11 124 33 31 70
+Kotake-mukaihara:F06/Y06 27 101
+Kudanshita:T07/Z06 33 37 120 19
+Kyobashi:G10 79 15
+Machiya:C17 49 84
+Meguro:N01 104
+Meiji-jingumae:C03/F15 94 138 102 48
+Minami-asagaya:M02 108 91
+Minami-gyotoku:T19 18 133
+Minami-senju:H20 66 49
+Minami-sunamachi:T15 127 83
+Minowa:H19 36 64
+Mitsukoshimae:G12/Z09 79 41 117 96
+Monzen-nakacho:T12 44 45
+Myoden:T21 18 9
+Myogadani:M23 111 55
+Nagatacho:N07/Y16/Z04 19 4 2 121 52 136 99
+Naka-meguro:H01 12
+Naka-okachimachi:H16 131 132 3
+Nakano:T01 90
+Nakano-fujimicho:m04 77 30
+Nakano-sakaue:M06 85 109 77
+Nakano-shimbashi:m05 76 75
+Nezu:C14 141 100
+Nihombashi:G11/T10 67 44 96 58
+Nijubashimae:C10 22 96
+Ningyocho:H13 51 44
+Nishi-funabashi:T23 9
+Nishi-kasai:T16 65 42
+Nishi-nippori:C16 59 100
+Nishi-shinjuku:M07 76 112
+Nishi-waseda:F11 26 142
+Nishigahara:N15 92 54
+Nogizaka:C05 94 1
+Ochanomizu:M20 6 31
+Ochiai:T02 119 74
+Ogikubo:M01 62
+Oji:N16 93 87
+Oji-kamiya:N17 106 92
+Omote-sando:C04/G02/Z02 4 61 88 102 14
+Oshiage:Z14 46
+Otemachi:C11/M18/T09/Z08 120 67 37 79 125 6 110 80
+Roppongi:H04 28 39
+Roppongi-itchome:N05 8 121
+Sakuradamon:Y17 71 140
+Sendagi:C15 84 78
+Senkawa:F07/Y07 40 56
+Shibuya:F16/Z01/G01 94 61
+Shikane-takanawa:N03 8 104
+Shikanedai:N02 60 103
+Shimbashi:G08 126 15
+Shimo:N18 0 93
+Shin-kiba:Y24 122
+Shin-koenji:M03 25 62
+Shin-nakano:M05 76 25
+Shin-ochanomizu:C12 141 6 96
+Shin-otsuka:M24 34 70
+Shinjuku:M08 85 114
+Shinjuku-gyoemmae:M10 137 114
+Shinjuku-sanchome:M09/F13 26 48 112 113
+Shintomicho:Y20 130 16
+Suehirocho:G14 132 41
+Suitengumae:Z10 67 50
+Sumiyoshi:Z12 46 50
+Takadanobaba:T03 135 90
+Takebashi:T08 57 96
+Tameike-sanno:G06/N06 98 71 126 53 2
+Tatsumi:Y23 128 107
+Tawaramachi:G18 35 5
+Todaimae:N12 29 55
+Tokyo:M17 15 96
+Toranomon:G07 121 105
+Toyocho:T14 65 45
+Toyosu:Y22 130 122
+Tsukiji:H10 20 23
+Tsukishima:Y21 115 128
+Ueno:G16/H17 35 36 132 73
+Ueno-hirokoji:G15 131 116 73
+Urayasu:T18 42 63
+Wakoshi:F01/Y01 11
+Waseda:T04 38 119
+Yotsuya:M12/N08 137 71 2 32
+Yotsuya-sanchome:M11 113 136
+Yoyogi-koen:C02 139 61
+Yoyogi-uehara:C01 138
+Yurakucho:Y18 99 22 16
+Yushima:C13 110 78
+Zoshigaya:F10 34 86

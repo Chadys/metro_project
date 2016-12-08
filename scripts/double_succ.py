@@ -1,9 +1,9 @@
 # coding: utf-8
 import re
 
-# script utile pour éliminer les doubles parmis les successeurs des stations
-# apparus lors de la fusion.
-# La fonction éliminer les doublons en créant un set des successeurs
+"""script utile pour éliminer les doubles parmis les successeurs des stations
+apparus lors de la fusion.
+La fonction éliminer les doublons en créant un set des successeurs"""
 
 with open("../tokyo.metro", 'r+') as source:
 	data=source.readlines()

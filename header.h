@@ -103,9 +103,18 @@ typedef struct trajet {
     char direction;
 } trajet;
 
+typedef struct divergence{
+    unsigned int station;
+    unsigned int distance;
+    unsigned int line;
+    char direction;
+} divergence;
+
 typedef struct trajets{
     trajet *trajet;
     unsigned int ntrajets;
+    divergence *diff;
+    unsigned int ndiff;
 } trajets;
 
 

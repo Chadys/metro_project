@@ -19,8 +19,12 @@ int main(){
     
     r_mode = get_r_mode();
     
-    if(init_metro("tokyo.metro", r_mode))
-        display_metro(r_mode);
+    if(!init_metro("tokyo.metro", r_mode)){
+        if(i)
+            quit();
+        exit(EXIT_FAILURE);
+    }
+    display_metro(r_mode);
     
     
     if (r_mode == COMPARE){

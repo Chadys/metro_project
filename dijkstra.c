@@ -62,6 +62,8 @@ trajets dijkstrabis(unsigned int current, unsigned int end, trajets paths, unsig
     
     path = paths.trajet+current_path*metro.nsta;
     path[current].unused = 0;
+    if(path[current].direction && path[current].line == UINT_MAX)
+        return paths;
         
     if(current == end)
         return paths;
@@ -109,13 +111,12 @@ trajets dijkstrabis(unsigned int current, unsigned int end, trajets paths, unsig
             }
             if((s_mode == QUICKEST && distance < path[corr_num].distance) || (s_mode==LEAST_TRANSFERS && (d1=distance/1000) < (d2=path[corr_num].distance/1000))){
                 if(!lines[0][1]){ // if line doesn't change
-                    if (new_path(paths, (divergence){corr_num, distance, n, path[current].direction}))
-                        change_paths(paths, current_path, extra_paths, corr_num, distance, current, n, path[current].direction);
+                    change_paths(paths, current_path, extra_paths, corr_num, distance, current, n, path[current].direction);
                 }
-                else if (new_path(paths, (divergence){corr_num, distance, lines[0][0], lines[0][1]-2})){
+                else{
                     change_paths(paths, current_path, extra_paths, corr_num, distance, current, lines[0][0], lines[0][1]-2);
                     for(i=0; lines[0][1]-2 /*at least one line */ && lines[i+1][0] != UINT_MAX; i++); // count number of extra lines
-                    if(i){
+                    if(i && new_path(paths, (divergence){corr_num, distance, lines[0][0], lines[0][1]-2})){
                         paths.ntrajets += i;
                         test = realloc(paths.trajet, paths.ntrajets*metro.nsta*sizeof(trajet));
                         if(!test)
@@ -136,7 +137,7 @@ trajets dijkstrabis(unsigned int current, unsigned int end, trajets paths, unsig
                 }
             }
             else if((s_mode == QUICKEST && distance == path[corr_num].distance) || (s_mode==LEAST_TRANSFERS && d1 == d2 && current != path[corr_num].from)){
-                if(new_path(paths, (divergence){corr_num, distance, lines[0][0], lines[0][1]-2})){
+                if((!lines[0][1] && new_path(paths, (divergence){corr_num, distance, n, path[current].direction})) || (lines[0][1] && new_path(paths, (divergence){corr_num, distance, lines[0][0], lines[0][1]-2}))){
                     for(i=0; lines[0][1] /*line has changed */ && lines[0][1]-2 /*at least one line in common */ && lines[i+1][0] != UINT_MAX; i++); // count number of extra lines
                     paths.ntrajets += i+1;
                     test = realloc(paths.trajet, paths.ntrajets*metro.nsta*sizeof(trajet));
@@ -263,12 +264,16 @@ unsigned int find_new_shortest(trajet *path){
 char new_path(trajets paths, divergence new_diff){
     unsigned int i;
     
-    for (i=0; i<paths.ndiff; i++)
+    for (i=0; i<paths.ndiff; i++){
         if(paths.diff[i].station == new_diff.station &&
-            paths.diff[i].distance == new_diff.distance &&
             paths.diff[i].line == new_diff.line &&
-            paths.diff[i].direction == new_diff.direction)
-            return 0;;
+            paths.diff[i].direction == new_diff.direction){
+            if(paths.diff[i].distance <= new_diff.distance)
+                return 0;
+            return 1;
+        }
+    }
+    
     return 1;
 }
 
@@ -295,6 +300,9 @@ trajets dijkstra_sort(trajets paths, unsigned int end){
             size=1;
         }
     }
+    
+    if (shortest_distance == UINT_MAX)
+        return free_trajets(paths);
     
     //check that no path are the same
      for (i=0, final_size = size; i<size; i++){

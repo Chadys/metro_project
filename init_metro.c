@@ -146,7 +146,7 @@ char init_stations(FILE *file, size_t final_size /* number of stations */, RUN_M
             matrix.mat = getmem(final_size*final_size, sizeof(char));
             if (!matrix.mat)
                 return 0;
-            memset(matrix.mat, 0, final_size*sizeof(char));
+            memset(matrix.mat, 0, final_size*final_size*sizeof(char));
     }
     while(metro.nsta < final_size){
         for(c=fgetc(file), i=0;c != ':';i++, c=fgetc(file)){

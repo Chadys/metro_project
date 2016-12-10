@@ -270,6 +270,7 @@ char new_path(trajets paths, divergence new_diff){
             paths.diff[i].direction == new_diff.direction){
             if(paths.diff[i].distance <= new_diff.distance)
                 return 0;
+            paths.diff[i].distance = new_diff.distance;
             return 1;
         }
     }

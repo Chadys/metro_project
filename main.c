@@ -19,11 +19,15 @@ int main(){
     
     r_mode = get_r_mode();
     
+    start = clock();
     if(!init_metro("tokyo.metro", r_mode)){
         if(i)
             quit();
         exit(EXIT_FAILURE);
     }
+    stop = clock();
+    time_spent = (double)(stop - start) / CLOCKS_PER_SEC;
+    printf("Graph init tooks %f second(s)\n", time_spent);
     display_metro(r_mode);
     
     

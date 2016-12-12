@@ -313,7 +313,7 @@ trajets dijkstra_sort(trajets paths, unsigned int end){
              if(to_keep[j] == UINT_MAX)
                 continue;
              for(station = end, station2 = end; station!=UINT_MAX && station2 != UINT_MAX; station = paths.trajet[to_keep[i]*metro.nsta+station].from, station2 = paths.trajet[to_keep[j]*metro.nsta+station2].from)
-                 if(station != station2)
+                 if(station != station2 || paths.trajet[to_keep[j]*metro.nsta+station2].line != paths.trajet[to_keep[i]*metro.nsta+station].line)
                      break;;
              if(station == UINT_MAX && station2 == UINT_MAX){
                  to_keep[j]=UINT_MAX;

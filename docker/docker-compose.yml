@@ -1,0 +1,14 @@
+version: "3.1"
+services:
+  tokyo-metro-dijkstra:
+    build: .
+    image: julie.com/tokyo-metro-dijkstra:latest
+    volumes:
+      - ..:/opt/code/
+      - ../cache/:/root/.emscripten_cache/
+    ports:
+      - 8084:8084
+    entrypoint:
+      - /bin/bash
+      - -c
+      - ./docker/launch.sh

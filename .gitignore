@@ -1,4 +1,7 @@
 # files for debug and testing of library functions
 
-test.c
-a.out
+metro
+bin/*
+.idea/*
+cmake-build-debug/*
+cache/*

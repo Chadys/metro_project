@@ -1,12 +1,36 @@
 #include "header.h"
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
 
+void user_search(void *r_mode){
+    trajets paths;
+    unsigned int begin, end;
+    SEARCH_MODE s_mode;
+
+    s_mode = get_s_mode();
+
+    printf("You need to choose the station of departure.\n");
+    begin = get_station();
+    printf("You need to choose the station of arrival.\n");
+    end = get_station();
+    paths = dijkstra(begin, end, *(RUN_MODE*)r_mode, s_mode);
+
+    display_paths(begin, end, paths, s_mode);
+
+    if(paths.ntrajets){
+        paths.ntrajets = 0;
+        free(paths.trajet);
+    }
+    printf("\nHere you are ! Back to a new search, you can still quit anytime with 'q'\n\n");
+}
 
 int main(){
     int i;
     trajets paths;
     unsigned int begin, end;
-    RUN_MODE r_mode;
     SEARCH_MODE s_mode;
+    RUN_MODE r_mode;
     double time_spent;
     clock_t start, stop;
 
@@ -68,22 +92,16 @@ int main(){
     }
     
     
-    else for(;;){
-        s_mode = get_s_mode();
-        
-        printf("You need to choose the station of departure.\n");
-        begin = get_station();
-        printf("You need to choose the station of arrival.\n");
-        end = get_station();
-        paths = dijkstra(begin, end, r_mode, s_mode);
-            
-        display_paths(begin, end, paths, s_mode);
-        
-        if(paths.ntrajets){
-            paths.ntrajets = 0;
-            free(paths.trajet);
+    else {
+
+#ifdef __EMSCRIPTEN__
+        // void emscripten_set_main_loop(em_callback_func func, System* func_arg, int fps, int simulate_infinite_loop);
+        emscripten_set_main_loop_arg(user_search, &r_mode, 0, 1); //setting 0 or a negative value as the fps will use the browser’s requestAnimationFrame mechanism to call the main loop function
+#else
+        for(;;){
+            user_search(&r_mode);
         }
-        printf("\nHere you are ! Back to a new search, you can still quit anytime with 'q'\n\n");
+#endif
     }
     
     if(i)

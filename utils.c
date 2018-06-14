@@ -63,7 +63,7 @@ size_t count_lines(FILE * file){
         while(buffer[size-1] != '\n' && !end){
             if (!fgets(buffer, MAX_CHAR_READ, file)){
                 perror("fgets");
-                fprintf(stderr, "Unexpected end of parsing, line %lu\n", s);
+                fprintf(stderr, "Unexpected end of parsing, line %u\n", s);
                 return 0;
             }
             end=0;
